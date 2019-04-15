@@ -17,27 +17,10 @@ public:
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
-  std::string getId() const
-  {
-    return m_id;
-  };
-  int getX() const
-  {
-    return m_x;
-  };
-  int getY() const
-  {
-    return m_y;
-  };
+  std::string getId() const { return m_id; };
   void addVoisin(Sommet *levoisin);
-  void setvaleurrelative(int val)
-  {
-    m_valeurrelative = val;
-  };
-  int getvaleurrelative() const
-  {
-    return m_valeurrelative;
-  };
+  void setvaleurrelative(int val) { m_valeurrelative = val; };
+  int getvaleurrelative() const { return m_valeurrelative; };
   void erasevoisin(std::string lenom);
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };

@@ -84,5 +84,5 @@ void Sommet::erasevoisin(string lenom)
 
 void Sommet::dessiner(Svgfile &svg)
 {
-    svg.addDisk(m_x, m_y, 5, "black");
+    svg.addDisk(m_coordx, m_coordy, 5, "black");
 }

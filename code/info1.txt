@@ -1,25 +1,25 @@
 9
-A
-B
-C
-D
-E
-F
-G
-H
-I
+A 100 100
+B 200 0
+C 300 0
+D 400 0
+E 500 100
+F 400 200
+G 300 200
+H 200 200
+I 300 100
 14
-A B 4
-A H 8
-B H 11
-B C 8
-H I 7
-H G 1
-C I 2
-I G 6
-C D 7
-C F 4
-G F 2
-D F 14
-D E 9
-F E 10
+0 A B
+1 A H
+2 B H
+3 B C
+4 H I
+5 H G
+6 C I
+7 I G
+8 C D
+9 C F
+10 G F
+11 D F
+12 D E
+13 F E

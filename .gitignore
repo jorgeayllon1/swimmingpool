@@ -41,6 +41,9 @@ main
 #Make
 Makefile
 
+#
+*.json
+
 #vscodefile
 #pas sur si il faut l'ignorer celui-la
 **/.vscode

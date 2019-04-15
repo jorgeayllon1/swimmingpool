@@ -14,11 +14,11 @@ class Graphe
 {
 public:
   Graphe() : m_ordre(0), m_taille(0){};
-  Graphe(std::string nomFichier, bool orienter, bool pondere);
+  Graphe(std::string nom_graphe,std::string nom_poids_graphe, bool orienter, bool pondere);
   void afficherData() const;
-  void addSommet(std::string lenom);
+  void addSommet(std::string lenom, int coordx, int coordy);
   void addSommet(Sommet leclone);
-  void addArete(std::string leiddepart, std::string leidarriver, int poids, bool orienter);
+  void addArete(std::string leiddepart, std::string leidarriver, float poids1, float poids2, float poids3, bool orienter);
   void removeSommet(std::string lenom, bool orienter); ///Pas fini
   void removeArete(std::string depart, std::string arriver, bool orienter);
   int getOrdre() { return m_ordre; };

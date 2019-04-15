@@ -8,8 +8,9 @@
 class Sommet
 {
 public:
-  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0){};
-  Sommet(std::string nom) : m_id(nom), m_valeurrelative(0), m_degre(0){};
+  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
+  Sommet(std::string nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
+                                                        m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
@@ -18,6 +19,8 @@ public:
   void setvaleurrelative(int val) { m_valeurrelative = val; };
   int getvaleurrelative() const { return m_valeurrelative; };
   void erasevoisin(std::string lenom);
+  int getcoordx() const { return m_coordx; };
+  int getcoordy() const { return m_coordy; };
 
 private:
   std::string m_id;
@@ -30,6 +33,8 @@ private:
   ///rip, c'est ce que je voulais faire à la base
   ///Inchallah j'ameliore le code après
   int m_degre;
+  int m_coordx;
+  int m_coordy;
 };
 
 #endif

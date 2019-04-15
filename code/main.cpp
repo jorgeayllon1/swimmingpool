@@ -5,7 +5,9 @@ using namespace std;
 
 int main()
 {
-	Graphe espace("info3.txt", orienter, true);
-	Graphe arbre = espace.dijkstraSPT("A");
+	Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt", orienter, true);
+	espace.afficherData();
+	///Graphe arbre = espace.dijkstraSPT("A");
+	///Graphe autre = espace.primMST("A");
 	return 0;
 }

@@ -38,6 +38,9 @@ main
 **/bin
 **/obj
 
+#Make
+Makefile
+
 #vscodefile
 #pas sur si il faut l'ignorer celui-la
 **/.vscode

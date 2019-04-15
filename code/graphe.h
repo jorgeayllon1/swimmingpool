@@ -19,7 +19,7 @@ public:
   void afficherData() const;
   void addSommet(std::string lenom, int coordx, int coordy);
   void addSommet(Sommet leclone);
-  void addArete(std::string leiddepart, std::string leidarriver, float poids1, float poids2, float poids3, bool orienter);
+  void addArete(std::string lenom,std::string leiddepart, std::string leidarriver, float poids1, float poids2, float poids3, bool orienter);
   void removeSommet(std::string lenom, bool orienter); ///Pas fini
   void removeArete(std::string depart, std::string arriver, bool orienter);
   int getOrdre() { return m_ordre; };
@@ -36,7 +36,7 @@ public:
 
 private:
   std::unordered_map<std::string, Sommet *> m_sommets;
-  std::unordered_set<Arete *> m_aretes;
+  std::unordered_map<std::string,Arete *> m_aretes;
   int m_ordre;
   int m_taille;
 };

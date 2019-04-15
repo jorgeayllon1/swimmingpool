@@ -13,12 +13,12 @@ void Graphe::addSommet(string lenom, int coordx, int coordy)
 }
 
 /// On ne peut pas crée d'arête entre des sommets qui ne sont pas dans le graphe
-void Graphe::addArete(string leiddepart, string leidarriver, float poids1, float poids2, float poids3, bool orienter)
+void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float poids1, float poids2, float poids3, bool orienter)
 {
     /// On verifie que les sommets existent dans le graphe
     assert(findSommet(leiddepart) && findSommet(leidarriver));
 
-    m_aretes.insert(new Arete(m_sommets.find(leiddepart)->second, m_sommets.find(leidarriver)->second, poids1, poids2, poids3));
+    m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leiddepart)->second, m_sommets.find(leidarriver)->second, poids1, poids2, poids3)));
     ///On ajoute l'arete au graphe, elle est defini par l'id de depart, l'id d'arriver et son poids
 
     m_sommets.find(leiddepart)->second->addVoisin(m_sommets.find(leidarriver)->second);
@@ -29,7 +29,7 @@ void Graphe::addArete(string leiddepart, string leidarriver, float poids1, float
     ///Si le graphe n'est pas orienté, on crée une arête identique dans le sens contraire
     if (!orienter)
     {
-        m_aretes.insert(new Arete(m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3));
+        m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
         /// Comme le graphe n'est pas orienté, on va considerer que le sommet d'arriver à pour voisin le sommet de départ
         /// A -> B et A <- B donc A <-> B donc A voisin : B et B voisin : A
 
@@ -85,9 +85,9 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
     {
         string recipiddepart;
         string recipidarriver;
+        string recipnom;
 
-        fiche >> donneinutile;
-
+        fiche >> recipnom;
         fiche >> recipiddepart;
         fiche >> recipidarriver;
 
@@ -95,7 +95,7 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
 
         if (!pondere)
         {
-            addArete(recipiddepart, recipidarriver, 0, 0, 0, orienter);
+            addArete(recipnom,recipiddepart, recipidarriver, 0, 0, 0, orienter);
         }
         else
         {
@@ -108,7 +108,7 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
             ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
             /// Ligne mis exprès en commentaire, ne pas enlever
 
-            addArete(recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
+            addArete(recipnom,recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
         }
     }
 }
@@ -130,7 +130,7 @@ void Graphe::afficherData() const
 
     for (auto &i : m_aretes)
     {
-        i->afficherData();
+        i.second->afficherData();
     }
 }
 
@@ -177,14 +177,14 @@ Graphe Graphe::primMST(string nomPremier)
             /// Mais pas tout les deux dans l'arbre ou hors de l'arbre
             /// On utilise donc XOR
             /// On a la validité des arêtes en checkant l'arbre avec des objets du graphe(cette phrase est important mais très tricky)
-            if (leprim.findSommet(i->getdepart().getId()) ^ leprim.findSommet(i->getarriver().getId()))
+            if (leprim.findSommet(i.second->getdepart().getId()) ^ leprim.findSommet(i.second->getarriver().getId()))
             {
-                if (poidsMin > i->getpoids1()) /// On recup l'arete au poids minimum qui est valide
+                if (poidsMin > i.second->getpoids1()) /// On recup l'arete au poids minimum qui est valide
                 {
                     /// Remarque : le > est arbitraire
                     /// La file de priorité se code dans ce if
-                    reciparete = *i;
-                    poidsMin = i->getpoids1();
+                    reciparete = *i.second;
+                    poidsMin = i.second->getpoids1();
                 }
             }
         }
@@ -201,7 +201,7 @@ Graphe Graphe::primMST(string nomPremier)
 
         /// On ajoute tout ça dans l'arbre
         leprim.addSommet(recipsommet.getId(), recipsommet.getcoordx(), recipsommet.getcoordy());
-        leprim.addArete(reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
+        leprim.addArete(reciparete.getnom(),reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
         /// Remarque : on ne peut pas rajouter une arête avant de rajouter le sommet
         /// Il faut que le sommet existe dans l'arbre
 
@@ -243,9 +243,9 @@ void Graphe::removeSommet(string lenom, bool orienter)
                 removeArete(i->getdepart().getId(), lenom, orienter);
             }
             */
-            if (i->getdepart().getId() == lenom || i->getarriver().getId() == lenom)
+            if (i.second->getdepart().getId() == lenom || i.second->getarriver().getId() == lenom)
             {
-                recip = i;
+                recip = i.second;
                 break;
             }
         }
@@ -266,10 +266,10 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     /// On cherche dans toutes les aretes du graphe
     for (auto &i : m_aretes)
     {
-        if (i->getdepart().getId() == depart && i->getarriver().getId() == arriver)
+        if (i.second->getdepart().getId() == depart && i.second->getarriver().getId() == arriver)
         {
             /// Si on trouve la bonne, on la met dans un coté et on sort de boucle
-            reciparete = i;
+            reciparete = i.second;
             break;
         }
     }
@@ -280,7 +280,7 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
         throw runtime_error("Arete non trouvé");
     else
     {
-        m_aretes.erase(reciparete);
+        ///m_aretes.erase(reciparete); Refaire cette ligne
         m_sommets.find(depart)->second->erasevoisin(arriver);
     }
 
@@ -290,9 +290,9 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     {
         for (auto &i : m_aretes)
         {
-            if (i->getdepart().getId() == arriver && i->getarriver().getId() == depart)
+            if (i.second->getdepart().getId() == arriver && i.second->getarriver().getId() == depart)
             {
-                reciparete = i;
+                reciparete = i.second;
                 break;
             }
         }
@@ -301,7 +301,7 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
             throw runtime_error("Arete non trouvé");
         else
         {
-            m_aretes.erase(reciparete);
+            ///m_aretes.erase(reciparete); Refaire cette ligne
             m_sommets.find(arriver)->second->erasevoisin(depart);
         }
     }
@@ -338,18 +338,18 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     {
         for (auto &i : m_aretes)
         {
-            if (i->getdepart().getId() == nomdumoment && !ledijkstra.findSommet(i->getarriver().getId()))
+            if (i.second->getdepart().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getarriver().getId()))
             {
                 /// Si l'arete par de notre sommet
                 /// Et i l'arete ne va pas dans un sommet deja validé par l'algorithme
                 /// On ne va pas rechecker la distance pour un sommet qui a déjà un plus court chemin
-                if (i->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getarriver().getId())->second.second)
+                if (i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i.second->getarriver().getId())->second.second)
                 {
                     /// Les sommets gardent toujours leur distance à l'origine
                     /// Si la distance à l'orgine + celle de la nouvelle arete est plus petite que la valeur precedente dans les données
                     /// Je vois pas trop comment traduire cette ligne, faut vraiment comprendre dijkstra
-                    distancechemins.find(i->getarriver().getId())->second.first = nomdumoment;
-                    distancechemins.find(i->getarriver().getId())->second.second = i->getpoids1() + distancechemins.find(nomdumoment)->second.second;
+                    distancechemins.find(i.second->getarriver().getId())->second.first = nomdumoment;
+                    distancechemins.find(i.second->getarriver().getId())->second.second = i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second;
                     /// On met à jours la distance au sommet de l'indice parcouru
                 }
             }
@@ -392,7 +392,7 @@ void Graphe::dessinerGraphe()
 
     svg.addGrid();
     for (auto &s : m_aretes)
-        s->dessiner(svg);
+        s.second->dessiner(svg);
     for (auto &s : m_sommets)
         (s.second)->dessiner(svg);
 }

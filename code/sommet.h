@@ -11,8 +11,9 @@
 class Sommet : public Graphique
 {
 public:
-  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0), m_x(rand() % 500), m_y(rand() % 500){};
-  Sommet(std::string nom) : m_id(nom), m_valeurrelative(0), m_degre(0), m_x(rand() % 500), m_y(rand() % 500){};
+  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
+  Sommet(std::string nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
+                                                        m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
@@ -39,6 +40,8 @@ public:
   };
   void erasevoisin(std::string lenom);
   void dessiner(Svgfile &svg);
+  int getcoordx() const { return m_coordx; };
+  int getcoordy() const { return m_coordy; };
 
 private:
   std::string m_id;
@@ -51,8 +54,8 @@ private:
   ///rip, c'est ce que je voulais faire à la base
   ///Inchallah j'ameliore le code après
   int m_degre;
-  int m_x;
-  int m_y;
+  int m_coordx;
+  int m_coordy;
 };
 
 #endif

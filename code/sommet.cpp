@@ -7,6 +7,8 @@ void Sommet::afficherData() const
 {
     cout << "Mon id est " << m_id << endl
          << "Je suis de degré " << m_degre << endl
+         << "Je suis en "
+         << "( " << m_coordx << " , " << m_coordy << " )\n"
          << "Je vois:\n";
 
     if (m_voisins.size())
@@ -48,7 +50,7 @@ void Sommet::addVoisin(Sommet *levoisin)
 }
 
 Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_valeurrelative(copie.m_valeurrelative),
-                                      m_voisins(copie.m_voisins), m_degre(copie.m_degre)
+                                      m_voisins(copie.m_voisins), m_degre(copie.m_degre), m_coordx(copie.m_coordx), m_coordy(copie.m_coordy)
 {
     /// La ligne m_voisins(copie.m_voisins) est très puissante
     /// Au lieu de réorienter les pointeurs

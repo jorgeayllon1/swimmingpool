@@ -1,0 +1,15 @@
+[
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "graphe.o",
+            "graphe.cpp"
+        ],
+        "directory": "/home/noah/lesprojets/swimmingpool/code",
+        "file": "graphe.cpp"
+    }
+]

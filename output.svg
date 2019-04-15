@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1800" height="900">
+
+<line x1="0" y1="0" x2="1800" y2="0" stroke="lightgrey" />
+<text x="5" y="-5" fill="lightgrey" >0</text>
+<line x1="0" y1="100" x2="1800" y2="100" stroke="lightgrey" />
+<text x="5" y="95" fill="lightgrey" >100</text>
+<line x1="0" y1="200" x2="1800" y2="200" stroke="lightgrey" />
+<text x="5" y="195" fill="lightgrey" >200</text>
+<line x1="0" y1="300" x2="1800" y2="300" stroke="lightgrey" />
+<text x="5" y="295" fill="lightgrey" >300</text>
+<line x1="0" y1="400" x2="1800" y2="400" stroke="lightgrey" />
+<text x="5" y="395" fill="lightgrey" >400</text>
+<line x1="0" y1="500" x2="1800" y2="500" stroke="lightgrey" />
+<text x="5" y="495" fill="lightgrey" >500</text>
+<line x1="0" y1="600" x2="1800" y2="600" stroke="lightgrey" />
+<text x="5" y="595" fill="lightgrey" >600</text>
+<line x1="0" y1="700" x2="1800" y2="700" stroke="lightgrey" />
+<text x="5" y="695" fill="lightgrey" >700</text>
+<line x1="0" y1="800" x2="1800" y2="800" stroke="lightgrey" />
+<text x="5" y="795" fill="lightgrey" >800</text>
+<line x1="0" y1="900" x2="1800" y2="900" stroke="lightgrey" />
+<text x="5" y="895" fill="lightgrey" >900</text>
+<line x1="0" y1="0" x2="0" y2="900" stroke="lightgrey" />
+<text x="5" y="15" fill="lightgrey" >0</text>
+<line x1="100" y1="0" x2="100" y2="900" stroke="lightgrey" />
+<text x="105" y="15" fill="lightgrey" >100</text>
+<line x1="200" y1="0" x2="200" y2="900" stroke="lightgrey" />
+<text x="205" y="15" fill="lightgrey" >200</text>
+<line x1="300" y1="0" x2="300" y2="900" stroke="lightgrey" />
+<text x="305" y="15" fill="lightgrey" >300</text>
+<line x1="400" y1="0" x2="400" y2="900" stroke="lightgrey" />
+<text x="405" y="15" fill="lightgrey" >400</text>
+<line x1="500" y1="0" x2="500" y2="900" stroke="lightgrey" />
+<text x="505" y="15" fill="lightgrey" >500</text>
+<line x1="600" y1="0" x2="600" y2="900" stroke="lightgrey" />
+<text x="605" y="15" fill="lightgrey" >600</text>
+<line x1="700" y1="0" x2="700" y2="900" stroke="lightgrey" />
+<text x="705" y="15" fill="lightgrey" >700</text>
+<line x1="800" y1="0" x2="800" y2="900" stroke="lightgrey" />
+<text x="805" y="15" fill="lightgrey" >800</text>
+<line x1="900" y1="0" x2="900" y2="900" stroke="lightgrey" />
+<text x="905" y="15" fill="lightgrey" >900</text>
+<line x1="1000" y1="0" x2="1000" y2="900" stroke="lightgrey" />
+<text x="1005" y="15" fill="lightgrey" >1000</text>
+<line x1="1100" y1="0" x2="1100" y2="900" stroke="lightgrey" />
+<text x="1105" y="15" fill="lightgrey" >1100</text>
+<line x1="1200" y1="0" x2="1200" y2="900" stroke="lightgrey" />
+<text x="1205" y="15" fill="lightgrey" >1200</text>
+<line x1="1300" y1="0" x2="1300" y2="900" stroke="lightgrey" />
+<text x="1305" y="15" fill="lightgrey" >1300</text>
+<line x1="1400" y1="0" x2="1400" y2="900" stroke="lightgrey" />
+<text x="1405" y="15" fill="lightgrey" >1400</text>
+<line x1="1500" y1="0" x2="1500" y2="900" stroke="lightgrey" />
+<text x="1505" y="15" fill="lightgrey" >1500</text>
+<line x1="1600" y1="0" x2="1600" y2="900" stroke="lightgrey" />
+<text x="1605" y="15" fill="lightgrey" >1600</text>
+<line x1="1700" y1="0" x2="1700" y2="900" stroke="lightgrey" />
+<text x="1705" y="15" fill="lightgrey" >1700</text>
+<line x1="1800" y1="0" x2="1800" y2="900" stroke="lightgrey" />
+<text x="1805" y="15" fill="lightgrey" >1800</text>
+<line x1="101" y1="266" x2="328" y2="387" stroke="red" />
+<line x1="302" y1="163" x2="101" y2="266" stroke="red" />
+<line x1="101" y1="266" x2="272" y2="6" stroke="red" />
+<line x1="272" y1="6" x2="101" y2="266" stroke="red" />
+<line x1="258" y1="88" x2="272" y2="6" stroke="red" />
+<line x1="157" y1="410" x2="82" y2="18" stroke="red" />
+<line x1="282" y1="468" x2="157" y2="410" stroke="red" />
+<line x1="328" y1="387" x2="101" y2="266" stroke="red" />
+<line x1="272" y1="6" x2="412" y2="60" stroke="red" />
+<line x1="302" y1="163" x2="412" y2="60" stroke="red" />
+<line x1="82" y1="18" x2="157" y2="410" stroke="red" />
+<line x1="157" y1="410" x2="282" y2="468" stroke="red" />
+<line x1="258" y1="88" x2="101" y2="266" stroke="red" />
+<line x1="272" y1="6" x2="82" y2="18" stroke="red" />
+<line x1="157" y1="410" x2="302" y2="163" stroke="red" />
+<line x1="82" y1="18" x2="272" y2="6" stroke="red" />
+<line x1="101" y1="266" x2="302" y2="163" stroke="red" />
+<line x1="412" y1="60" x2="272" y2="6" stroke="red" />
+<line x1="328" y1="387" x2="258" y2="88" stroke="red" />
+<line x1="82" y1="18" x2="282" y2="468" stroke="red" />
+<line x1="101" y1="266" x2="258" y2="88" stroke="red" />
+<line x1="157" y1="410" x2="412" y2="60" stroke="red" />
+<line x1="302" y1="163" x2="157" y2="410" stroke="red" />
+<line x1="258" y1="88" x2="328" y2="387" stroke="red" />
+<line x1="272" y1="6" x2="258" y2="88" stroke="red" />
+<line x1="282" y1="468" x2="82" y2="18" stroke="red" />
+<line x1="412" y1="60" x2="157" y2="410" stroke="red" />
+<line x1="412" y1="60" x2="302" y2="163" stroke="red" />
+<circle cx="157" cy="410" r="5" fill="black" />
+<circle cx="302" cy="163" r="5" fill="black" />
+<circle cx="82" cy="18" r="5" fill="black" />
+<circle cx="412" cy="60" r="5" fill="black" />
+<circle cx="282" cy="468" r="5" fill="black" />
+<circle cx="272" cy="6" r="5" fill="black" />
+<circle cx="258" cy="88" r="5" fill="black" />
+<circle cx="328" cy="387" r="5" fill="black" />
+<circle cx="101" cy="266" r="5" fill="black" />
+
+
+</svg>

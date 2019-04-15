@@ -7,10 +7,11 @@
 #include "sommet.h"
 #include "arete.h"
 #include <cassert>
+#include "graphique.h"
 ///Pour dijkstra
 #include <map>
 
-class Graphe
+class Graphe : public Graphique
 {
 public:
   Graphe() : m_ordre(0), m_taille(0){};
@@ -29,6 +30,9 @@ public:
   Graphe primMST(std::string nomPremier);
   bool findSommet(std::string nomatrouver);
   ~Graphe();
+
+  //graphisme
+  void dessinerGraphe();
 
 private:
   std::unordered_map<std::string, Sommet *> m_sommets;

@@ -1,4 +1,5 @@
 #include "sommet.h"
+#include <random>
 
 using namespace std;
 
@@ -77,4 +78,9 @@ void Sommet::erasevoisin(string lenom)
         m_voisins.erase(recip);
         m_degre--;
     }
+}
+
+void Sommet::dessiner(Svgfile &svg)
+{
+    svg.addDisk(m_x, m_y, 5, "black");
 }

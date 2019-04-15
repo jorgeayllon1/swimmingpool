@@ -20,3 +20,8 @@ Arete::~Arete()
     m_depart = NULL;
     m_arriver = NULL;
 }
+
+void Arete::dessiner(Svgfile &svg)
+{
+    svg.addLine(m_depart->getX(), m_depart->getY(), m_arriver->getX(), m_arriver->getY(), "red");
+}

@@ -1,5 +1,0 @@
-Faire un bfs pour pouvoir faire le djikstra
-
-pour faire djikstra tu peut faire un arbre couvrant et après faire des fonctions dedans
-Pour marqué les sommets tu peut crée un nouvel attribut
-OU crée un graphe_djikstra puis parcourir le graphe_normal en utilisant tes fonctions de validations en considerant le graphe_djikstra

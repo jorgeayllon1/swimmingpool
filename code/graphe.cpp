@@ -281,28 +281,6 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     m_taille--;
 }
 
-/*
-Graphe Graphe::dijkstraSPT(string nompremier)
-{
-    /// Initialisation
-    Graphe ledijktra;
-
-    unordered_map<string, unordered_map<string, int>> leschemins;
-    ///Ce qu'on veut : unordered_map<string,pair(string,int)>
-    /// Mec on part sûr ça, c'est solide
-
-    for (auto &i : m_sommets)
-    {
-        i.second->setvaleurrelative(9999);
-    }
-    m_sommets.find(nompremier)->second->setvaleurrelative(0);
-    /// Fin initialisation
-    unordered_map<string, Sommet *> marquage=m_sommets;
-
-    return ledijktra;
-}
-*/
-
 Graphe Graphe::dijkstraSPT(string nomPremier)
 {
     assert(findSommet(nomPremier));
@@ -375,4 +353,17 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     ///Mettre à jours les arêtes du graphe grâce au plus court chemin
 
     return ledijkstra;
+}
+
+///Graphisme
+void Graphe::dessinerGraphe()
+{
+
+    Svgfile svg;
+
+    svg.addGrid();
+    for (auto &s : m_aretes)
+        s->dessiner(svg);
+    for (auto &s : m_sommets)
+        (s.second)->dessiner(svg);
 }

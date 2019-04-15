@@ -3,8 +3,9 @@
 #include <iostream>
 #include "sommet.h"
 #include <string>
+#include "graphique.h"
 
-class Arete
+class Arete : public Graphique
 {
 public:
   Arete() : m_depart(NULL), m_arriver(NULL), m_poids(0){};
@@ -14,8 +15,8 @@ public:
   Sommet getarriver() { return *m_arriver; };
   int getpoids() { return m_poids; };
   ~Arete();
-
   void afficherData() const;
+  void dessiner(Svgfile &svg);
 
 private:
   Sommet *m_depart;

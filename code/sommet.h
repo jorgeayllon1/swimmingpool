@@ -3,21 +3,42 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <random>
 #include <unordered_set>
+#include "svgfile.h"
+#include "graphique.h"
 
-class Sommet
+class Sommet : public Graphique
 {
 public:
-  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0){};
-  Sommet(std::string nom) : m_id(nom), m_valeurrelative(0), m_degre(0){};
+  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0), m_x(rand() % 500), m_y(rand() % 500){};
+  Sommet(std::string nom) : m_id(nom), m_valeurrelative(0), m_degre(0), m_x(rand() % 500), m_y(rand() % 500){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
-  std::string getId() const { return m_id; };
+  std::string getId() const
+  {
+    return m_id;
+  };
+  int getX() const
+  {
+    return m_x;
+  };
+  int getY() const
+  {
+    return m_y;
+  };
   void addVoisin(Sommet *levoisin);
-  void setvaleurrelative(int val) { m_valeurrelative = val; };
-  int getvaleurrelative() const { return m_valeurrelative; };
+  void setvaleurrelative(int val)
+  {
+    m_valeurrelative = val;
+  };
+  int getvaleurrelative() const
+  {
+    return m_valeurrelative;
+  };
   void erasevoisin(std::string lenom);
+  void dessiner(Svgfile &svg);
 
 private:
   std::string m_id;
@@ -30,6 +51,8 @@ private:
   ///rip, c'est ce que je voulais faire à la base
   ///Inchallah j'ameliore le code après
   int m_degre;
+  int m_x;
+  int m_y;
 };
 
 #endif

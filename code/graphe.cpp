@@ -10,10 +10,12 @@ void Graphe::addSommet(string lenom, int coordx, int coordy)
         m_sommets.insert(make_pair(lenom, new Sommet(lenom, coordx, coordy)));
         m_ordre++;
     }
+    else
+        cerr << "ERROR, sommet trouvé\n";
 }
 
 /// On ne peut pas crée d'arête entre des sommets qui ne sont pas dans le graphe
-void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float poids1, float poids2, float poids3, bool orienter)
+void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float poids1, float poids2, float poids3)
 {
     /// On verifie que les sommets existent dans le graphe
     assert(findSommet(leiddepart) && findSommet(leidarriver));
@@ -27,9 +29,12 @@ void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float
     /// A -> B | A voisin : B | B voisin : rien
 
     ///Si le graphe n'est pas orienté, on crée une arête identique dans le sens contraire
+    /*
     if (!orienter)
     {
-        m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
+        string putaindedoublons = "2";
+        cerr << "je ne suis pas orienter ! \n";
+        m_aretes.insert(make_pair(lenom + putaindedoublons, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
         /// Comme le graphe n'est pas orienté, on va considerer que le sommet d'arriver à pour voisin le sommet de départ
         /// A -> B et A <- B donc A <-> B donc A voisin : B et B voisin : A
 
@@ -37,13 +42,14 @@ void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float
 
         /// Si on n'est pas orienter on a des doublons d'arête, on met donc à jours les degrés des sommets
     }
+    */
 
     /// A CODER :
     /// Ameliorer les degrés de Sommet, faire deg entrant + sortant
     m_taille++;
 }
 
-Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool pondere) : m_ordre(0), m_taille(0)
+Graphe::Graphe(string nom_graphe, string nom_poids_graphe) : m_ordre(0), m_taille(0)
 {
     ifstream fiche(nom_graphe);
     ifstream fichepoids(nom_poids_graphe);
@@ -93,23 +99,16 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
 
         fichepoids >> donneinutile;
 
-        if (!pondere)
-        {
-            addArete(recipnom,recipiddepart, recipidarriver, 0, 0, 0, orienter);
-        }
-        else
-        {
-            /// Si le graphe est ponderé on a une valeur de poid en plus. cf le README
-            float recipPoids1 = 0, recipPoids2 = 0;
-            ///int recipPoids3 = 0;
-            fichepoids >> recipPoids1;
-            fichepoids >> recipPoids2;
+        /// Si le graphe est ponderé on a une valeur de poid en plus. cf le README
+        float recipPoids1 = 0, recipPoids2 = 0;
+        ///int recipPoids3 = 0;
+        fichepoids >> recipPoids1;
+        fichepoids >> recipPoids2;
 
-            ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
-            /// Ligne mis exprès en commentaire, ne pas enlever
+        ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
+        /// Ligne mis exprès en commentaire, ne pas enlever
 
-            addArete(recipnom,recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
-        }
+        addArete(recipnom, recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0);
     }
 }
 
@@ -201,7 +200,7 @@ Graphe Graphe::primMST(string nomPremier)
 
         /// On ajoute tout ça dans l'arbre
         leprim.addSommet(recipsommet.getId(), recipsommet.getcoordx(), recipsommet.getcoordy());
-        leprim.addArete(reciparete.getnom(),reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
+        leprim.addArete(reciparete.getnom(), reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0);
         /// Remarque : on ne peut pas rajouter une arête avant de rajouter le sommet
         /// Il faut que le sommet existe dans l'arbre
 
@@ -324,7 +323,7 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
 
     for (auto &i : m_sommets)
     {
-        distancechemins.insert(make_pair(i.second->getId(), make_pair(" ", 9999)));
+        distancechemins.insert(make_pair(i.second->getId(), make_pair(" ", 99999)));
     }
     /// On ajoute tout les chemins au ensemble d'information
 
@@ -336,8 +335,20 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
 
     do
     {
+        int poidrecip = 9999;
+        for (auto &i : distancechemins)
+        {
+            if (i.second.second < poidrecip && !ledijkstra.findSommet(i.first))
+            {
+                /// Si la distance est minimale est non marquée
+                nomdumoment = i.first;
+                poidrecip = i.second.second;
+            }
+        }
+
         for (auto &i : m_aretes)
         {
+
             if (i.second->getdepart().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getarriver().getId()))
             {
                 /// Si l'arete par de notre sommet
@@ -353,9 +364,18 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
                     /// On met à jours la distance au sommet de l'indice parcouru
                 }
             }
+
+            if (i.second->getarriver().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getdepart().getId()))
+            {
+                if (i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i.second->getdepart().getId())->second.second)
+                {
+                    distancechemins.find(i.second->getdepart().getId())->second.first = nomdumoment;
+                    distancechemins.find(i.second->getdepart().getId())->second.second = i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second;
+                }
+            }
         }
 
-        int poidrecip = 9999;
+        poidrecip = 99999;
         /// On cherche la distance minimale non déjà validée
 
         for (auto &i : distancechemins)
@@ -369,7 +389,8 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
         }
 
         ///nomdumoment devient le sommet de refference et on le marque
-        ledijkstra.addSommet(nomdumoment, 0, 0);
+        //ledijkstra.afficherData();
+        ledijkstra.addSommet(nomdumoment, m_sommets.find(nomdumoment)->second->getcoordx(), m_sommets.find(nomdumoment)->second->getcoordy());
 
     } while (ledijkstra.getOrdre() != m_ordre);
 

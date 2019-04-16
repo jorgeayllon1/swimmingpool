@@ -11,27 +11,27 @@
 class Sommet : public Graphique
 {
 public:
-  Sommet() : m_id(""), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
-  Sommet(std::string nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
+  Sommet() : m_id(0), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
+  Sommet(int nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
                                                         m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
-  std::string getId() const { return m_id; };
+  int getId() const { return m_id; };
   void addVoisin(Sommet *levoisin);
   void setvaleurrelative(int val) { m_valeurrelative = val; };
   int getvaleurrelative() const { return m_valeurrelative; };
-  void erasevoisin(std::string lenom);
+  void erasevoisin(int lenom);
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
 
 private:
-  std::string m_id;
+  int m_id;
   int m_valeurrelative; /// Poids temp pour Prim algo
   /// J'ai mis unordered_set au lieu de vector car on a pas besoin de classer les voisins
   /// On a un meilleur accé au valeur grâce à unordered_set
-  std::unordered_set<Sommet *> m_voisins;
+  std::vector<Sommet *> m_voisins;
   ///On va dire qu'un sommet a des voisins
   ///Au lieu de dire que des sommets sont liés par des aretes
   ///rip, c'est ce que je voulais faire à la base

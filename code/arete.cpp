@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Arete::Arete(string lenom, Sommet *depart, Sommet *arriver, float lepoids1, float lepoids2, float lepoids3) : m_nom(lenom), m_depart(depart), m_arriver(arriver),
+Arete::Arete(int lenom, Sommet *depart, Sommet *arriver, float lepoids1, float lepoids2, float lepoids3) : m_nom(lenom), m_depart(depart), m_arriver(arriver),
                                                                                                               m_poids1(lepoids1), m_poids2(lepoids2), m_poids3(lepoids3)
 {
 }

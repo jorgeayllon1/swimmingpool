@@ -44,7 +44,7 @@ void Sommet::addVoisin(Sommet *levoisin)
     if (!trouve)
     {
 
-        m_voisins.insert(levoisin);
+        m_voisins.push_back(levoisin);
         m_degre++;
     }
 }
@@ -58,7 +58,7 @@ Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_valeurrelative(copie.m
     /// Vive la stl mdr
 }
 
-void Sommet::erasevoisin(string lenom)
+void Sommet::erasevoisin(int lenom)
 {
     /// Variable temp
     Sommet *recip = NULL;
@@ -77,7 +77,7 @@ void Sommet::erasevoisin(string lenom)
     }
     if (recip)
     {
-        m_voisins.erase(recip);
+        m_voisins.erase(m_voisins.begin() + recip->m_id);
         m_degre--;
     }
 }

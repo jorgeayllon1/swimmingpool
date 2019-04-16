@@ -3,6 +3,7 @@
 #include <iostream>
 #include "sommet.h"
 #include <string>
+#include <fstream>
 #include "graphique.h"
 
 class Arete : public Graphique
@@ -19,6 +20,7 @@ public:
   ~Arete();
   void afficherData() const;
   void dessiner(Svgfile &svg);
+  void writeData(std::ofstream &outData);
 
 private:
   std::string m_nom;

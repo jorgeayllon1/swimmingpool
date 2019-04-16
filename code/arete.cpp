@@ -1,4 +1,5 @@
 #include "arete.h"
+#include <fstream>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ void Arete::afficherData() const
     cout << "Je suis " << m_nom << " : De " << m_depart->getId() << " a " << m_arriver->getId() << " en ( " << m_poids1 << " , " << m_poids2 << " )" << endl;
 }
 
-Arete::Arete(Arete const &copie) : m_nom(copie.m_nom),m_depart(copie.m_depart), m_arriver(copie.m_arriver), m_poids1(copie.m_poids1)
+Arete::Arete(Arete const &copie) : m_nom(copie.m_nom), m_depart(copie.m_depart), m_arriver(copie.m_arriver), m_poids1(copie.m_poids1)
 {
 }
 
@@ -22,7 +23,14 @@ Arete::~Arete()
     m_arriver = NULL;
 }
 
+///Graphisme
 void Arete::dessiner(Svgfile &svg)
 {
     svg.addLine(m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), "red");
+}
+
+///Excel
+void Arete::writeData(ofstream &outData)
+{
+    outData << m_nom << "   ; " << m_depart->getId() << "   ; " << m_arriver->getId() << "  ; " << m_poids1 << "    ;" << m_poids2 << " ;" << endl;
 }

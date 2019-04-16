@@ -95,7 +95,7 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
 
         if (!pondere)
         {
-            addArete(recipnom,recipiddepart, recipidarriver, 0, 0, 0, orienter);
+            addArete(recipnom, recipiddepart, recipidarriver, 0, 0, 0, orienter);
         }
         else
         {
@@ -108,7 +108,7 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
             ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
             /// Ligne mis exprès en commentaire, ne pas enlever
 
-            addArete(recipnom,recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
+            addArete(recipnom, recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
         }
     }
 }
@@ -201,7 +201,7 @@ Graphe Graphe::primMST(string nomPremier)
 
         /// On ajoute tout ça dans l'arbre
         leprim.addSommet(recipsommet.getId(), recipsommet.getcoordx(), recipsommet.getcoordy());
-        leprim.addArete(reciparete.getnom(),reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
+        leprim.addArete(reciparete.getnom(), reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
         /// Remarque : on ne peut pas rajouter une arête avant de rajouter le sommet
         /// Il faut que le sommet existe dans l'arbre
 
@@ -382,6 +382,25 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     ///Mettre à jours les arêtes du graphe grâce au plus court chemin
 
     return ledijkstra;
+}
+
+///Excel
+
+void Graphe::manipulationData()
+{
+    ofstream outData;
+    outData.open("outfile.csv", ios::app);
+
+    giveData(outData);
+}
+
+void Graphe::giveData(ofstream &outData)
+{
+    //boucle parcourant les aretes
+    for (auto &a : m_aretes)
+    {
+        (a.second)->writeData(outData);
+    }
 }
 
 ///Graphisme

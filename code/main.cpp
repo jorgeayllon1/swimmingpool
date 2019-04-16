@@ -13,5 +13,8 @@ int main()
 	espace.dessinerGraphe();
 	espace.afficherData();
 
+	//excel
+	espace.manipulationData();
+
 	return 0;
 }

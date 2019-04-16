@@ -1,5 +1,16 @@
 #include "arete.h"
+#include "graphe.h"
 #include <fstream>
+
+#include <sstream>
+
+template <typename T>
+std::string NumberToString(T Number)
+{
+    std::ostringstream ss;
+    ss << Number;
+    return ss.str();
+}
 
 using namespace std;
 
@@ -26,7 +37,17 @@ Arete::~Arete()
 ///Graphisme
 void Arete::dessiner(Svgfile &svg)
 {
-    svg.addLine(m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), "red");
+    svg.addLine(m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), "#e55039");
+
+    string cout1 = NumberToString(m_poids1);
+    string cout2 = NumberToString(m_poids2);
+    string val = cout1 + ";" + cout2;
+    if (m_poids3)
+    {
+        string cout3 = NumberToString(m_poids3);
+        val = val + ";" + cout3;
+    }
+    svg.addText((m_depart->getcoordx() + m_arriver->getcoordx()) / 2 - 10, (m_depart->getcoordy() + m_arriver->getcoordy()) / 2 - 5, val, "#3c6382");
 }
 
 ///Excel

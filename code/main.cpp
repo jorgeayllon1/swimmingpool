@@ -7,14 +7,11 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	Graphe espace("info1.txt", "info1_weights.txt", orienter, true);
-	Graphe arbre = espace.dijkstraSPT("A");
+	Graphe espace("manhattan.txt", "manhattan_weights_0.txt", orienter, true);
+	//Graphe arbre = espace.dijkstraSPT("0");
+	//Graphe arbrePrim = espace.primMST("0");
 
 	espace.dessinerGraphe();
-	espace.afficherData();
-
-	//excel
-	espace.manipulationData();
 
 	return 0;
 }

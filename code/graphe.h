@@ -10,6 +10,8 @@
 #include "graphique.h"
 ///Pour dijkstra
 #include <map>
+/// pour le cote grapique
+#define MARGE 100
 
 class Graphe : public Graphique
 {
@@ -31,9 +33,6 @@ public:
   bool findSommet(std::string nomatrouver);
   ~Graphe();
 
-  ///Excel
-  void manipulationData();
-  void giveData(std::ofstream &outData);
   //graphisme
   void dessinerGraphe();
 

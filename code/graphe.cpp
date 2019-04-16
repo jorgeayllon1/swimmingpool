@@ -384,34 +384,17 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     return ledijkstra;
 }
 
-///Excel
-
-void Graphe::manipulationData()
-{
-    ofstream outData;
-    outData.open("outfile.csv", ios::app);
-
-    giveData(outData);
-}
-
-void Graphe::giveData(ofstream &outData)
-{
-    //boucle parcourant les aretes
-    for (auto &a : m_aretes)
-    {
-        (a.second)->writeData(outData);
-    }
-}
-
 ///Graphisme
 void Graphe::dessinerGraphe()
 {
 
     Svgfile svg;
-
+    svg.addRect(0, 0, 2000, 2000, "#f8c291");
     svg.addGrid();
     for (auto &s : m_aretes)
         s.second->dessiner(svg);
     for (auto &s : m_sommets)
         (s.second)->dessiner(svg);
+
+    dessinerCourbe(svg);
 }

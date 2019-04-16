@@ -29,6 +29,8 @@ public:
   /// Peut être list<tuple>
   Graphe primMST(std::string nomPremier);
   bool findSommet(std::string nomatrouver);
+  std::vector<Graphe> calcul_sousgraphes_admissibles();
+  bool test_connexite();
   ~Graphe();
 
   //graphisme

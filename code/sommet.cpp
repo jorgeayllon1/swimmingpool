@@ -1,5 +1,8 @@
 #include "sommet.h"
 #include <random>
+#include <queue>
+#include <unordered_set>
+
 
 using namespace std;
 
@@ -44,7 +47,7 @@ void Sommet::addVoisin(Sommet *levoisin)
     if (!trouve)
     {
 
-        m_voisins.insert(levoisin);
+        m_voisins.push_back(levoisin);
         m_degre++;
     }
 }
@@ -77,7 +80,7 @@ void Sommet::erasevoisin(string lenom)
     }
     if (recip)
     {
-        m_voisins.erase(recip);
+        //m_voisins.clear(recip);
         m_degre--;
     }
 }
@@ -85,4 +88,44 @@ void Sommet::erasevoisin(string lenom)
 void Sommet::dessiner(Svgfile &svg)
 {
     svg.addDisk(m_coordx, m_coordy, 5, "black");
+}
+
+std::unordered_map<std::string,std::string> Sommet::parcoursBFS() {
+
+    std::unordered_map<std::string,std::string> l_pred;
+    ///création d'un unordered_map pour stocker tout les sommmets , afin d'eviter de les redecouvrir par la suite
+    std::unordered_map<std::string,const Sommet*> sommets_decouverts;
+    std::queue <const Sommet*> file; ///création de la file de sommets
+    file.push(this);///envoie du sommet de depart en debut de file
+
+    while (file.size()!=0)///tant que la file n'est pas vide
+    {      const Sommet*S1 = file.front();///definition de sommet S1 comme etant le premier sommet de la file
+           sommets_decouverts[S1->m_id]=file.front();///stockage de S1 dans sommets_decouverts
+
+           ///Boucle for pour stocker les voisins
+           for (unsigned int i = 0 ; i < S1->m_voisins.size();i++)
+           {
+                ///condition pour savoir si un sommet à déja été decouvert
+                if(sommets_decouverts.find(S1->m_voisins[i]->m_id)== sommets_decouverts.end())
+                {
+                    file.push(S1->m_voisins[i]);///stockage du nouveau sommet decouvert dans la file
+                    sommets_decouverts [S1->m_voisins[i]->m_id]= S1->m_voisins[i];///stockage du nouveau sommmet dans sommets_decouverts
+                    l_pred[S1->m_voisins[i]->m_id]=S1->m_id;///stockage du nouveau sommet et de son predécesseur dans l_pred
+                }
+           }
+           file.pop();///suppression du premier sommet de la file pour passer au suivant
+    }
+    return l_pred;///on retourne l'unordered_map l_pred
+}
+
+std::unordered_set<std::string> Sommet::rechercherCC() {
+    std::unordered_set<std::string> cc;    ///création d'un unordered_set pour stocker tout les id des sommmets du composant connexe
+    std::unordered_map<std::string,std::string> l_pred;///création d'un unordered_map pour stocker tout les sommmets , pour y recuperer les id
+    l_pred=parcoursBFS();///Utilisation la BFS pour recuperer les sommets qui sont liés entre eux
+    cc.insert(this->m_id);///recuperation de l'id du sommet de depart dans cc
+    for(auto s : l_pred)
+    {
+        cc.insert(s.first);///recuperation de l'id des sommets connectés dans cc
+    }
+    return cc;///on retourne cc
 }

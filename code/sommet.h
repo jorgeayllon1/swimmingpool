@@ -25,13 +25,17 @@ public:
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
+  int getDegre () const { return m_degre;  };/******ajout******/
+  std::unordered_map<std::string,std::string> parcoursBFS();
+  std::unordered_set<std::string> rechercherCC() ;
+
 
 private:
   std::string m_id;
   int m_valeurrelative; /// Poids temp pour Prim algo
   /// J'ai mis unordered_set au lieu de vector car on a pas besoin de classer les voisins
   /// On a un meilleur accé au valeur grâce à unordered_set
-  std::unordered_set<Sommet *> m_voisins;
+  std::vector<Sommet *> m_voisins;
   ///On va dire qu'un sommet a des voisins
   ///Au lieu de dire que des sommets sont liés par des aretes
   ///rip, c'est ce que je voulais faire à la base

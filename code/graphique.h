@@ -4,6 +4,9 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <math.h>
 
 class Graphique
 {

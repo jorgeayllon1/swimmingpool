@@ -3,6 +3,22 @@
 
 using namespace std;
 
+void pred(int sommetinit, int a, vector<int> lespred)
+{
+    if (lespred[a] == sommetinit)
+    {
+        /// Si on atteint le sommet de depart, on l'affiche et la fonction se termine
+        cout << sommetinit<<" ";
+    }
+    else
+    {
+        cout << lespred[a] << " ";
+        ///On affiche le precedent du sommet
+        pred(sommetinit, lespred[a], lespred);
+        /// On appelle la fonction recursivement pour appeller le precedent du precedent
+    }
+}
+/// Enlever et mettre dans algorithme.cpp
 void Graphe::addSommet(string lenom, int coordx, int coordy)
 {
     if (!findSommet(lenom))
@@ -24,6 +40,7 @@ void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float
     ///On ajoute l'arete au graphe, elle est defini par l'id de depart, l'id d'arriver et son poids
 
     m_sommets.find(leiddepart)->second->addVoisin(m_sommets.find(leidarriver)->second);
+    m_sommets.find(leidarriver)->second->addVoisin(m_sommets.find(leiddepart)->second);
     /// Grâce à l'arete et son orientation, on peut definir un voisin du Sommet
     /// Ici on considère l'orientation : le sommet d'arriver n'a pas pour voisin le sommet de depart
     /// A -> B | A voisin : B | B voisin : rien
@@ -328,6 +345,7 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     /// On ajoute tout les chemins au ensemble d'information
 
     distancechemins.find(nomPremier)->second.second = 0;
+    distancechemins.find(nomPremier)->second.first = nomPremier;
     /// Le sommet de depart a une distance nulle à lui-même
 
     string nomdumoment = nomPremier;
@@ -365,7 +383,7 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
                 }
             }
 
-            if (i.second->getarriver().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getdepart().getId()))
+            else if (i.second->getarriver().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getdepart().getId()))
             {
                 if (i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i.second->getdepart().getId())->second.second)
                 {
@@ -394,9 +412,37 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
 
     } while (ledijkstra.getOrdre() != m_ordre);
 
+    cout << "Som : Pred | Dist\n";
     for (auto &i : distancechemins)
     {
         cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+    }
+
+    /// On met à jours les arêtes
+
+    vector<int> lespred;
+    for (unsigned int i=0;i<distancechemins.size();i++)
+    {
+        lespred.push_back(0);
+    }
+    for (auto &i : distancechemins)
+    {
+        lespred[stoi(i.first)] = stoi(i.second.first);
+    }
+
+    /*
+    cerr << "LES PRED\n";
+    for (unsigned int i = 0; i < lespred.size(); i++)
+    {
+        cout << i << " " << lespred[i] << endl;
+    }*/
+
+    cout<<"Les chemins : \n";
+    for (auto &i : distancechemins)
+    {
+        cout << i.first << " ";
+        pred(stoi(nomPremier), stoi(i.first), lespred);
+        cout<<"en "<<i.second.second<<endl;
     }
 
     ///Code à faire :

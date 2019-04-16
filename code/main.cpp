@@ -6,10 +6,9 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	Graphe espace("info1.txt", "info1_weights.txt");
-	Graphe arbre = espace.dijkstraSPT("B");
-	arbre.afficherData();
-	arbre.dessinerGraphe();
+	Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
+	espace.dessinerGraphe();
+	Graphe arbre = espace.dijkstraSPT("3");
 
 	return 0;
 }

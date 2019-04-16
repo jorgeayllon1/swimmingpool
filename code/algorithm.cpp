@@ -5,7 +5,7 @@
 
 using namespace std;
 
-/*
+
 string trouver_min(int dist[],bool sptSet[],unordered_map<string,Sommet*> lessommets)
 {
     int min=INFINI;
@@ -15,4 +15,5 @@ string trouver_min(int dist[],bool sptSet[],unordered_map<string,Sommet*> lessom
     {
     }
 }
-*/
+
+/// j'essaye de crée une branche pareto

@@ -28,7 +28,6 @@ public:
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
   bool findVoisin(int lenom) const;
-  std::unordered_map<int, int> parcoursDFS() const;
 
 private:
   int m_id;

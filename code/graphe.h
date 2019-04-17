@@ -21,13 +21,13 @@ public:
   void removeArete(int depart, int arriver, bool orienter);
   int getOrdre() { return m_ordre; };
   Sommet getSommetid(int nomid);
-  Graphe dijkstraSPT(int nompremier);
-  void dfstry1(int nompremier);
+  Graphe dijkstraSPT(int nompremier,int critere);
   int indicesommet(int nomsommet) const;
   /// tuple utilisable ??
   /// Peut être list<tuple>
-  Graphe primMST(int nomPremier);
+  Graphe primMST(int nomPremier,int critere);
   bool findSommet(int nomatrouver);
+  int couplecritere(int critere1,int critere2);
   ~Graphe();
 
   //graphisme

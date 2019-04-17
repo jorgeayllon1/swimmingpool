@@ -7,8 +7,9 @@ int main()
 {
 	srand(time(NULL));
 	Graphe espace("files/manhattan.txt", "files/manhattan_weights_0.txt");
-	espace = espace.primMST(12);
-	espace = espace.dijkstraSPT(8);
+	Graphe arbre = espace.primMST(3, 0);
+	arbre.dessinerGraphe();
+	Graphe autre = espace.dijkstraSPT(0, 1);
 
 	return 0;
 }

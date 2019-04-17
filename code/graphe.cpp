@@ -1,7 +1,10 @@
 #include "graphe.h"
 #include <fstream>
-
+#include <allegro.h>
+#include <sstream>
 using namespace std;
+
+
 
 void pred(int sommetinit, int a, vector<int> lespred)
 {
@@ -472,3 +475,16 @@ void Graphe::dessinerGraphe()
     for (auto &s : m_sommets)
         s->dessiner(svg);
 }
+
+void Graphe::drawGraphe(BITMAP *arborescence)
+{
+
+
+    for (auto &s : m_aretes)
+        s->draw(arborescence);
+    for (auto &s : m_sommets)
+        s->draw(arborescence);
+
+
+}
+

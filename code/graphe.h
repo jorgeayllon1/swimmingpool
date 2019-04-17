@@ -28,10 +28,12 @@ public:
   /// Peut être list<tuple>
   Graphe primMST(int nomPremier);
   bool findSommet(int nomatrouver);
+
   ~Graphe();
 
   //graphisme
   void dessinerGraphe();
+  void drawGraphe(BITMAP *arbo);
 
 private:
   std::vector<Sommet *> m_sommets;

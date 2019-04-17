@@ -23,6 +23,7 @@ public:
   int getvaleurrelative() const { return m_valeurrelative; };
   void erasevoisin(int lenom);
   void dessiner(Svgfile &svg);
+  void draw(BITMAP *);
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
 

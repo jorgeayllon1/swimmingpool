@@ -4,6 +4,16 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <string>
+#include <allegro.h>
+#include <sstream>
+
+template <typename T>
+  std::string NumberToString ( T Number )
+  {
+     std::ostringstream ss;
+     ss << Number;
+     return ss.str();
+  }
 
 class Graphique
 {

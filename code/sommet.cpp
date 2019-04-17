@@ -86,3 +86,21 @@ void Sommet::dessiner(Svgfile &svg)
 {
     svg.addDisk(m_coordx, m_coordy, 5, "black");
 }
+
+void Sommet::draw(BITMAP *arbo)
+{
+        FONT *myfont;
+
+      myfont = load_font("image/fontComic16.pcx", NULL, NULL);
+     if (!myfont)
+    {
+        allegro_message("prb allocation FONT myfont");
+        allegro_exit();
+        exit(EXIT_FAILURE);
+    }
+    string texte = NumberToString(m_id);
+    const char *cstr = texte.c_str();
+    circle(arbo,m_coordx, m_coordy, 15, makecol(10, 61, 98));
+    circlefill(arbo,m_coordx, m_coordy, 13, makecol(248, 194, 145));
+    textprintf_centre_ex(arbo,myfont,m_coordx,m_coordy-12,makecol(10, 61, 98),-1,cstr);
+}

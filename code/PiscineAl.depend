@@ -1,0 +1,73 @@
+# depslib dependency file v1.0
+1555523511 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\algorithm.cpp
+	<iostream>
+	"graphe.h"
+	<set>
+
+1555537307 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.h
+	<iostream>
+	<string>
+	"sommet.h"
+	"arete.h"
+	<cassert>
+	"graphique.h"
+	<algorithm>
+	<map>
+
+1555536376 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.h
+	<iostream>
+	<string>
+	<vector>
+	<random>
+	<unordered_set>
+	"svgfile.h"
+	"graphique.h"
+
+1555523511 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1555538014 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.h
+	<iostream>
+	<unordered_map>
+	<unordered_set>
+	<string>
+	<allegro.h>
+	<sstream>
+
+1555538810 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.h
+	<iostream>
+	"sommet.h"
+	<string>
+	"graphique.h"
+
+1555540424 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.cpp
+	"arete.h"
+
+1555538795 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.cpp
+	"graphe.h"
+	<fstream>
+	<allegro.h>
+	<sstream>
+
+1555538014 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.cpp
+	"graphe.h"
+	"graphique.h"
+	"svgfile.h"
+
+1555540503 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.cpp
+	"sommet.h"
+	<random>
+
+1555523511 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\svgfile.cpp
+	<iostream>
+	<sstream>
+
+1555537345 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\main.cpp
+	"graphe.h"
+	<random>
+	"time.h"
+	<allegro.h>
+	<time.h>
+

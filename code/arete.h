@@ -19,6 +19,7 @@ public:
   ~Arete();
   void afficherData() const;
   void dessiner(Svgfile &svg);
+  void draw(BITMAP *arbo);
 
 private:
   int m_nom;

@@ -24,6 +24,7 @@ public:
   int getOrdre() { return m_ordre; };
   Sommet getSommetid(int nomid);
   Graphe dijkstraSPT(int nompremier);
+  void dfstry1(int nompremier){};
   /// tuple utilisable ??
   /// Peut être list<tuple>
   Graphe primMST(int nomPremier);

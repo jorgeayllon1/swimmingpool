@@ -27,7 +27,7 @@ public:
   int getcoordy() const { return m_coordy; };
   int getDegre () const { return m_degre;  };/******ajout******/
   std::unordered_map<std::string,std::string> parcoursBFS();
-  std::unordered_set<std::string> rechercherCC() ;
+  std::unordered_set<std::string> rechercherCC();
 
 
 private:

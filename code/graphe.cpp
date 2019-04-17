@@ -1,5 +1,5 @@
 #include "graphe.h"
-
+#include <time.h>
 using namespace std;
 
 void Graphe::addSommet(string lenom, int coordx, int coordy)
@@ -408,28 +408,29 @@ std::vector<Graphe> Graphe::calcul_sousgraphes_admissibles()
 {
     unsigned int nb_cas = pow(2,m_taille);
     std::vector<Graphe> mes_sous_graphes;
+    //clock_t start_t , end_t, total;
+
 
     for(unsigned int i=0 ; i<nb_cas; i++)
     {
-        vector<int>numeration_binaire;
+        vector<bool>numeration_binaire;//start_t = clock();
         unsigned int nb_arretes = 0;
         int number = i;
 
         for (int j = 0 ; j < m_taille ; j++)
         {
             if(number%2 == 0)
-                numeration_binaire.push_back(0);
-            if(number%2 != 0)
-                numeration_binaire.push_back(1);
+                numeration_binaire.push_back(false);
+            else
+                numeration_binaire.push_back(true);
             nb_arretes=numeration_binaire.back()+nb_arretes;
             number = number/2;
 
         }
-        if (nb_arretes >=(m_sommets.size()-1))
+
+        if (nb_arretes ==(m_sommets.size()-1))
         {
             Graphe Tampon;
-            //std::cout << "ok"<< std::endl;
-
             for (int k = 0 ; k < m_ordre ; k++)
             {
                 std::string a = NumberToString(k);
@@ -440,37 +441,27 @@ std::vector<Graphe> Graphe::calcul_sousgraphes_admissibles()
 
                 if (numeration_binaire[atoi(s.second->getnom().c_str())]==1)
                 {
-                    //std::cout<<s.second->getdepart().getId()<<std::endl;
                     Tampon.addArete(s.second->getnom(),s.second->getdepart().getId(),s.second->getarriver().getId(),s.second->getpoids1(),s.second->getpoids2(),0.0,false);
-                    //Tampon.m_sommets
                 }
             }
-            if(!(Tampon.test_connexite()))
-            {
-               //std::cout<<"pas OK"<<std::endl;
-            }
-            else
+            if(Tampon.test_connexite())
             {
                 mes_sous_graphes.push_back(Tampon);
-                //std::cout<<".";
+               // std::cout<<"*";
             }
-
+            //end_t = clock();std::cout<<(double)end_t-start_t<<std::endl;
         }
     }
-   /* for(int i=0;i<8;i++)
-    {
 
-    }*/
 
     return mes_sous_graphes;
 }
 
 bool Graphe::test_connexite()
 {
-int i=0;
+    int i=0;
     std::unordered_set<std::string> cc;
     std::unordered_set<std::string> sommmet_decouvert;///creation d'une liste de tout les sommet déjà decouvert
-    //std::cout<<"composantes connexes :"<<std::endl;
     for(auto j :m_sommets)///lecture de sommet en sommet
     {
         ///condition de verification de la decouverte ou non d'un sommet
@@ -479,13 +470,10 @@ int i=0;
             i++;///incrementation du nombre de graphe connexe
             cc=j.second->rechercherCC();///lancement de la recherche de sommmet connectés au sommet initiale
 
-            //std::cout<<"    cc"<<i<<std::endl;
             for(auto k :cc)///boucle de lecture des differents sommets connectés
             {
-                //std::cout<<"    "<<k;
                 sommmet_decouvert.insert(k);///insertion des sommets connectés dans sommet_decouvert
             }
-            //std::cout<<std::endl;
         }
     }
     if(i!=1)

@@ -31,40 +31,37 @@ void Graphe::addSommet(int lenom, int coordx, int coordy)
         cerr << "ERROR, sommet trouvé\n";
 }
 
+/// IMPORTANT
+/// lors de la creation de graphe, le nom du sommet n'est pas forcement son indice dans le vector de graphe
+int Graphe::indicesommet(int nomsommet) const
+{
+    for(unsigned int i=0;i<m_sommets.size();i++)
+    {
+        if(nomsommet==m_sommets[i]->getId())
+        return i;
+    }
+
+    throw runtime_error("indice nom trouvé");
+    return 0;
+}
+
 /// On ne peut pas crée d'arête entre des sommets qui ne sont pas dans le graphe
-void Graphe::addArete(int lenom, int leiddepart, int leidarriver, float poids1, float poids2, float poids3)
+void Graphe::addArete(int lenom, int depart, int arriver, float poids1, float poids2, float poids3)
 {
     /// On verifie que les sommets existent dans le graphe
-    assert(findSommet(leiddepart) && findSommet(leidarriver));
+    assert(findSommet(depart) && findSommet(arriver));
 
     //m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leiddepart)->second, m_sommets.find(leidarriver)->second, poids1, poids2, poids3)));
-    m_aretes.push_back(new Arete(lenom, m_sommets[leiddepart], m_sommets[leidarriver], poids1, poids2, poids3));
+    m_aretes.push_back(new Arete(lenom, m_sommets[indicesommet(depart)], m_sommets[indicesommet(arriver)], poids1, poids2, poids3));
     ///On ajoute l'arete au graphe, elle est defini par l'id de depart, l'id d'arriver et son poids
 
-    m_sommets[leiddepart]->addVoisin(m_sommets[leidarriver]);
-    m_sommets[leidarriver]->addVoisin(m_sommets[leiddepart]);
+    m_sommets[indicesommet(depart)]->addVoisin(m_sommets[indicesommet(arriver)]);
+    m_sommets[indicesommet(arriver)]->addVoisin(m_sommets[indicesommet(depart)]);
+
     /// Grâce à l'arete et son orientation, on peut definir un voisin du Sommet
     /// Ici on considère l'orientation : le sommet d'arriver n'a pas pour voisin le sommet de depart
     /// A -> B | A voisin : B | B voisin : rien
 
-    ///Si le graphe n'est pas orienté, on crée une arête identique dans le sens contraire
-    /*
-    if (!orienter)
-    {
-        string putaindedoublons = "2";
-        cerr << "je ne suis pas orienter ! \n";
-        m_aretes.insert(make_pair(lenom + putaindedoublons, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
-        /// Comme le graphe n'est pas orienté, on va considerer que le sommet d'arriver à pour voisin le sommet de départ
-        /// A -> B et A <- B donc A <-> B donc A voisin : B et B voisin : A
-
-        m_sommets.find(leidarriver)->second->addVoisin(m_sommets.find(leiddepart)->second);
-
-        /// Si on n'est pas orienter on a des doublons d'arête, on met donc à jours les degrés des sommets
-    }
-    */
-
-    /// A CODER :
-    /// Ameliorer les degrés de Sommet, faire deg entrant + sortant
     m_taille++;
 }
 
@@ -170,9 +167,9 @@ void Graphe::addSommet(Sommet leclone)
 
 bool Graphe::findSommet(int nomatrouver)
 {
-    for(auto & i : m_sommets)
+    for (auto &i : m_sommets)
     {
-        if(i->getId()==nomatrouver)
+        if (i->getId() == nomatrouver)
         {
             return true;
         }
@@ -458,6 +455,16 @@ Graphe Graphe::dijkstraSPT(int nomPremier)
     ///Mettre à jours les arêtes du graphe grâce au plus court chemin
 
     return ledijkstra;
+}
+
+void Graphe::dfstry1(int nompremier)
+{
+    unordered_map<int, int> pred = m_sommets[nompremier]->parcoursDFS();
+
+    for (auto &i : pred)
+    {
+        cout << i.first << " " << i.second << endl;
+    }
 }
 
 ///Graphisme

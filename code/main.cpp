@@ -6,9 +6,9 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	Graphe espace("files/cubetown.txt", "files/cubetown_weights_0.txt");
-	espace.dessinerGraphe();
-	espace = espace.dijkstraSPT(3);
+	Graphe espace("files/manhattan.txt", "files/manhattan_weights_0.txt");
+	espace = espace.primMST(12);
+	espace = espace.dijkstraSPT(8);
 
 	return 0;
 }

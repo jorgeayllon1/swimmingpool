@@ -31,7 +31,7 @@ void Sommet::afficherData() const
 void Sommet::addVoisin(Sommet *levoisin)
 {
     bool trouve = false;
-
+    
     for (auto &i : m_voisins)
     {
         if (i->getId() == levoisin->getId())
@@ -43,10 +43,12 @@ void Sommet::addVoisin(Sommet *levoisin)
 
     if (!trouve)
     {
-
         m_voisins.push_back(levoisin);
+        sort(m_voisins.begin(),m_voisins.end());
         m_degre++;
     }
+    else throw runtime_error("Error tu ajoutes un voisin qui n'existe pas\n");
+
 }
 
 Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_valeurrelative(copie.m_valeurrelative),
@@ -85,4 +87,53 @@ void Sommet::erasevoisin(int lenom)
 void Sommet::dessiner(Svgfile &svg)
 {
     svg.addDisk(m_coordx, m_coordy, 5, "black");
+}
+
+bool Sommet::findVoisin(int lenom) const
+{
+    for (auto &i : m_voisins)
+    {
+        if (i->getId() == lenom)
+            return true;
+    }
+    return false;
+}
+
+std::unordered_map<int, int> Sommet::parcoursDFS() const
+{
+
+    std::unordered_map<int, int> l_pred; ///ensemble des prédécesseur de this
+
+    std::unordered_set<int> l_dec; ///ensemble des sommets decouverts
+
+    std::stack<const Sommet *> pile; ///pile nécessaire au dfs
+
+    pile.push(this); ///On empile le premier sommet
+
+    l_dec.insert(this->m_id); ///il est decouvert
+
+    ///Tant que la pile n'est pas vide
+    do
+    {
+        Sommet *tampon = new Sommet(*pile.top()); ///On crée une copie du sommet que l'on va traité
+
+        pile.pop(); ///Dépiler le prochain sommet
+
+        for (auto s : tampon->m_voisins)
+        { ///Pour chaque successeur s
+
+            std::unordered_set<int>::const_iterator it = l_dec.find(s->m_id);
+            if (it == l_dec.end())
+            { ///Si il n'est pas decouvert
+
+                l_dec.insert(s->m_id); ///Empiler s
+
+                l_pred.insert(make_pair(s->m_id, tampon->m_id)); ///Noter que s est le prédécesseur de s
+
+                pile.push(s);
+            }
+        }
+    } while (!pile.empty());
+
+    return l_pred; ///on renvoie l'ensembles de predeceur de this
 }

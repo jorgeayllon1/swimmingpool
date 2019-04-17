@@ -5,6 +5,8 @@
 #include <vector>
 #include <random>
 #include <unordered_set>
+#include <stack>
+#include <algorithm>
 #include "svgfile.h"
 #include "graphique.h"
 
@@ -13,7 +15,7 @@ class Sommet : public Graphique
 public:
   Sommet() : m_id(0), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
   Sommet(int nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
-                                                        m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
+                                                m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
@@ -25,6 +27,8 @@ public:
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
+  bool findVoisin(int lenom) const;
+  std::unordered_map<int, int> parcoursDFS() const;
 
 private:
   int m_id;

@@ -1,44 +1,48 @@
 #ifndef GRAPHE_H
 #define GRAPHE_H
 #include <iostream>
-#include <unordered_map>
-#include <unordered_set>
 #include <string>
 #include "sommet.h"
 #include "arete.h"
 #include <cassert>
 #include "graphique.h"
+#include <algorithm>
+#include <sstream>
+#include <math.h>
 ///Pour dijkstra
 #include <map>
-/// pour le cote grapique
-#define MARGE 100
 
 class Graphe : public Graphique
 {
 public:
   Graphe() : m_ordre(0), m_taille(0){};
-  Graphe(std::string nom_graphe, std::string nom_poids_graphe, bool orienter, bool pondere);
+  Graphe(std::string nom_graphe,std::string nom_poids_graphe);
   void afficherData() const;
-  void addSommet(std::string lenom, int coordx, int coordy);
+  void addSommet(int lenom, int coordx, int coordy);
   void addSommet(Sommet leclone);
-  void addArete(std::string lenom, std::string leiddepart, std::string leidarriver, float poids1, float poids2, float poids3, bool orienter);
-  void removeSommet(std::string lenom, bool orienter); ///Pas fini
-  void removeArete(std::string depart, std::string arriver, bool orienter);
+  void addArete(int lenom,int leiddepart,int leidarriver, float poids1, float poids2, float poids3);
+  void removeSommet(int lenom, bool orienter); ///Pas fini
+  void removeArete(int depart, int arriver, bool orienter);
   int getOrdre() { return m_ordre; };
-  Sommet getSommetid(std::string nomid);
-  Graphe dijkstraSPT(std::string nompremier);
+  Sommet getSommetid(int nomid);
+  Graphe dijkstraSPT(int nompremier);
   /// tuple utilisable ??
   /// Peut être list<tuple>
-  Graphe primMST(std::string nomPremier);
-  bool findSommet(std::string nomatrouver);
+  Graphe primMST(int nomPremier);
+  bool findSommet(int nomatrouver);
+  std::vector<std::vector<bool>> calcul_sousgraphes_admissibles(std::vector<std::pair<float,float>> *total);
+  bool test_connexite();
+  Graphe Conversion(std::vector<bool> Binaire);
+  void Pareto(std::vector<std::pair<float,float>> &total);
+  std::pair<float,float> DonnePoids();
   ~Graphe();
 
   //graphisme
   void dessinerGraphe();
 
 private:
-  std::unordered_map<std::string, Sommet *> m_sommets;
-  std::unordered_map<std::string, Arete *> m_aretes;
+  std::vector<Sommet *> m_sommets;
+  std::vector<Arete *> m_aretes;
   int m_ordre;
   int m_taille;
 };

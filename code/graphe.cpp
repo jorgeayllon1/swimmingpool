@@ -1,35 +1,60 @@
 #include "graphe.h"
 #include <fstream>
+#include <list>
 
 using namespace std;
 
-void Graphe::addSommet(string lenom, int coordx, int coordy)
+void pred(int sommetinit, int a, vector<int> lespred)
+{
+    if (lespred[a] == sommetinit)
+    {
+        /// Si on atteint le sommet de depart, on l'affiche et la fonction se termine
+        cout << sommetinit << " ";
+    }
+    else
+    {
+        cout << lespred[a] << " ";
+        ///On affiche le precedent du sommet
+        pred(sommetinit, lespred[a], lespred);
+        /// On appelle la fonction recursivement pour appeller le precedent du precedent
+    }
+}
+/// Enlever et mettre dans algorithme.cpp
+void Graphe::addSommet(int lenom, int coordx, int coordy)
 {
     if (!findSommet(lenom))
     {
-        m_sommets.insert(make_pair(lenom, new Sommet(lenom, coordx, coordy)));
+        //m_sommets.insert(make_pair(lenom, new Sommet(lenom, coordx, coordy)));
+        m_sommets.push_back(new Sommet(lenom, coordx, coordy));
         m_ordre++;
     }
+    else
+        cerr << "ERROR, sommet trouvé\n";
 }
 
 /// On ne peut pas crée d'arête entre des sommets qui ne sont pas dans le graphe
-void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float poids1, float poids2, float poids3, bool orienter)
+void Graphe::addArete(int lenom, int leiddepart, int leidarriver, float poids1, float poids2, float poids3)
 {
     /// On verifie que les sommets existent dans le graphe
     assert(findSommet(leiddepart) && findSommet(leidarriver));
 
-    m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leiddepart)->second, m_sommets.find(leidarriver)->second, poids1, poids2, poids3)));
+    //m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leiddepart)->second, m_sommets.find(leidarriver)->second, poids1, poids2, poids3)));
+    m_aretes.push_back(new Arete(lenom, m_sommets[leiddepart], m_sommets[leidarriver], poids1, poids2, poids3));
     ///On ajoute l'arete au graphe, elle est defini par l'id de depart, l'id d'arriver et son poids
 
-    m_sommets.find(leiddepart)->second->addVoisin(m_sommets.find(leidarriver)->second);
+    m_sommets[leiddepart]->addVoisin(m_sommets[leidarriver]);
+    m_sommets[leidarriver]->addVoisin(m_sommets[leiddepart]);
     /// Grâce à l'arete et son orientation, on peut definir un voisin du Sommet
     /// Ici on considère l'orientation : le sommet d'arriver n'a pas pour voisin le sommet de depart
     /// A -> B | A voisin : B | B voisin : rien
 
     ///Si le graphe n'est pas orienté, on crée une arête identique dans le sens contraire
+    /*
     if (!orienter)
     {
-        m_aretes.insert(make_pair(lenom, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
+        string putaindedoublons = "2";
+        cerr << "je ne suis pas orienter ! \n";
+        m_aretes.insert(make_pair(lenom + putaindedoublons, new Arete(lenom, m_sommets.find(leidarriver)->second, m_sommets.find(leiddepart)->second, poids1, poids2, poids3)));
         /// Comme le graphe n'est pas orienté, on va considerer que le sommet d'arriver à pour voisin le sommet de départ
         /// A -> B et A <- B donc A <-> B donc A voisin : B et B voisin : A
 
@@ -37,13 +62,14 @@ void Graphe::addArete(string lenom, string leiddepart, string leidarriver, float
 
         /// Si on n'est pas orienter on a des doublons d'arête, on met donc à jours les degrés des sommets
     }
+    */
 
     /// A CODER :
     /// Ameliorer les degrés de Sommet, faire deg entrant + sortant
     m_taille++;
 }
 
-Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool pondere) : m_ordre(0), m_taille(0)
+Graphe::Graphe(string nom_graphe, string nom_poids_graphe) : m_ordre(0), m_taille(0)
 {
     ifstream fiche(nom_graphe);
     ifstream fichepoids(nom_poids_graphe);
@@ -58,7 +84,7 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
     fiche >> recipOrdre;
     for (int i = 0; i < recipOrdre; i++)
     {
-        string leid;
+        int leid;
         int lacoordx;
         int lacoordy;
 
@@ -83,9 +109,9 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
 
     for (int i = 0; i < recipTaille; i++)
     {
-        string recipiddepart;
-        string recipidarriver;
-        string recipnom;
+        int recipiddepart;
+        int recipidarriver;
+        int recipnom;
 
         fiche >> recipnom;
         fiche >> recipiddepart;
@@ -93,23 +119,16 @@ Graphe::Graphe(string nom_graphe, string nom_poids_graphe, bool orienter, bool p
 
         fichepoids >> donneinutile;
 
-        if (!pondere)
-        {
-            addArete(recipnom, recipiddepart, recipidarriver, 0, 0, 0, orienter);
-        }
-        else
-        {
-            /// Si le graphe est ponderé on a une valeur de poid en plus. cf le README
-            float recipPoids1 = 0, recipPoids2 = 0;
-            ///int recipPoids3 = 0;
-            fichepoids >> recipPoids1;
-            fichepoids >> recipPoids2;
+        /// Si le graphe est ponderé on a une valeur de poid en plus. cf le README
+        float recipPoids1 = 0, recipPoids2 = 0;
+        ///int recipPoids3 = 0;
+        fichepoids >> recipPoids1;
+        fichepoids >> recipPoids2;
 
-            ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
-            /// Ligne mis exprès en commentaire, ne pas enlever
+        ///fichepoids>>recipPoids3; /// C'est le poids3, mais le fichier ne le supporte pas
+        /// Ligne mis exprès en commentaire, ne pas enlever
 
-            addArete(recipnom, recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0, orienter);
-        }
+        addArete(recipnom, recipiddepart, recipidarriver, recipPoids1, recipPoids2, 0);
     }
 }
 
@@ -121,7 +140,7 @@ void Graphe::afficherData() const
 
     for (auto &i : m_sommets)
     {
-        i.second->afficherData();
+        i->afficherData();
     }
 
     cout << endl;
@@ -130,37 +149,44 @@ void Graphe::afficherData() const
 
     for (auto &i : m_aretes)
     {
-        i.second->afficherData();
+        i->afficherData();
     }
 }
 
 /// Rend la copie d'un Sommet du graphe
-Sommet Graphe::getSommetid(std::string nomid)
+Sommet Graphe::getSommetid(int nomid)
 {
     if (findSommet(nomid))
         throw runtime_error("Id de sommet non trouver : graphe.cpp getSommetid");
 
     /// On appelle le constructeur de copie
-    return Sommet(*m_sommets.find(nomid)->second);
+    return Sommet(*m_sommets[nomid]);
 }
 
 void Graphe::addSommet(Sommet leclone)
 {
-    m_sommets.insert(make_pair(leclone.getId(), new Sommet(leclone)));
+    m_sommets.push_back(new Sommet(leclone));
     m_ordre++;
 }
 
-bool Graphe::findSommet(string nomatrouver)
+bool Graphe::findSommet(int nomatrouver)
 {
-    return (m_sommets.find(nomatrouver) != m_sommets.end());
+    for(auto & i : m_sommets)
+    {
+        if(i->getId()==nomatrouver)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
-Graphe Graphe::primMST(string nomPremier)
+Graphe Graphe::primMST(int nomPremier)
 {
     assert(findSommet(nomPremier));
     /// Initialisation
     Graphe leprim;
-    leprim.addSommet(nomPremier, m_sommets.find(nomPremier)->second->getcoordx(), m_sommets.find(nomPremier)->second->getcoordy());
+    leprim.addSommet(nomPremier, m_sommets[nomPremier]->getcoordx(), m_sommets[nomPremier]->getcoordy());
 
     /// Variable temp
     Arete reciparete;
@@ -177,14 +203,14 @@ Graphe Graphe::primMST(string nomPremier)
             /// Mais pas tout les deux dans l'arbre ou hors de l'arbre
             /// On utilise donc XOR
             /// On a la validité des arêtes en checkant l'arbre avec des objets du graphe(cette phrase est important mais très tricky)
-            if (leprim.findSommet(i.second->getdepart().getId()) ^ leprim.findSommet(i.second->getarriver().getId()))
+            if (leprim.findSommet(i->getdepart().getId()) ^ leprim.findSommet(i->getarriver().getId()))
             {
-                if (poidsMin > i.second->getpoids1()) /// On recup l'arete au poids minimum qui est valide
+                if (poidsMin > i->getpoids1()) /// On recup l'arete au poids minimum qui est valide
                 {
                     /// Remarque : le > est arbitraire
                     /// La file de priorité se code dans ce if
-                    reciparete = *i.second;
-                    poidsMin = i.second->getpoids1();
+                    reciparete = *i;
+                    poidsMin = i->getpoids1();
                 }
             }
         }
@@ -199,9 +225,10 @@ Graphe Graphe::primMST(string nomPremier)
             recipsommet = reciparete.getarriver();
         }
 
+
         /// On ajoute tout ça dans l'arbre
         leprim.addSommet(recipsommet.getId(), recipsommet.getcoordx(), recipsommet.getcoordy());
-        leprim.addArete(reciparete.getnom(), reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0, false);
+        leprim.addArete(reciparete.getnom(), reciparete.getdepart().getId(), reciparete.getarriver().getId(), reciparete.getpoids1(), reciparete.getpoids2(), 0);
         /// Remarque : on ne peut pas rajouter une arête avant de rajouter le sommet
         /// Il faut que le sommet existe dans l'arbre
 
@@ -213,14 +240,16 @@ Graphe Graphe::primMST(string nomPremier)
 
 Graphe::~Graphe()
 {
-    ///Ca veut dire quoi dtor ?
-    ///Ah ok, c'est destructor
+    for(unsigned int i=0;i<m_sommets.size();i++)
+        delete(m_sommets[i]);
+    for(unsigned int i=0;i<m_aretes.size();i++)
+        delete(m_aretes[i]);
 }
 
-void Graphe::removeSommet(string lenom, bool orienter)
+void Graphe::removeSommet(int lenom, bool orienter)
 {
     ///Si le sommet n'existe pas on essaye pas de l'effacer
-    assert(m_sommets.find(lenom) != m_sommets.end());
+    assert(findSommet(lenom));
 
     for (unsigned int i = 0; i < m_aretes.size() + 1; i++)
     {
@@ -243,9 +272,9 @@ void Graphe::removeSommet(string lenom, bool orienter)
                 removeArete(i->getdepart().getId(), lenom, orienter);
             }
             */
-            if (i.second->getdepart().getId() == lenom || i.second->getarriver().getId() == lenom)
+            if (i->getdepart().getId() == lenom || i->getarriver().getId() == lenom)
             {
-                recip = i.second;
+                recip = i;
                 break;
             }
         }
@@ -253,12 +282,12 @@ void Graphe::removeSommet(string lenom, bool orienter)
             removeArete(recip->getdepart().getId(), recip->getarriver().getId(), orienter);
     }
 
-    m_sommets.erase(lenom);
+    m_sommets.erase(m_sommets.begin() + lenom);
 
     m_ordre--;
 }
 
-void Graphe::removeArete(string depart, string arriver, bool orienter)
+void Graphe::removeArete(int depart, int arriver, bool orienter)
 {
     /// Variable temp
     Arete *reciparete;
@@ -266,10 +295,10 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     /// On cherche dans toutes les aretes du graphe
     for (auto &i : m_aretes)
     {
-        if (i.second->getdepart().getId() == depart && i.second->getarriver().getId() == arriver)
+        if (i->getdepart().getId() == depart && i->getarriver().getId() == arriver)
         {
             /// Si on trouve la bonne, on la met dans un coté et on sort de boucle
-            reciparete = i.second;
+            reciparete = i;
             break;
         }
     }
@@ -281,7 +310,7 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     else
     {
         ///m_aretes.erase(reciparete); Refaire cette ligne
-        m_sommets.find(depart)->second->erasevoisin(arriver);
+        m_sommets[depart]->erasevoisin(arriver);
     }
 
     /// Si le graphe est non orienter, il y a une arete qui va dans l'autre sens
@@ -290,9 +319,9 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     {
         for (auto &i : m_aretes)
         {
-            if (i.second->getdepart().getId() == arriver && i.second->getarriver().getId() == depart)
+            if (i->getdepart().getId() == arriver && i->getarriver().getId() == depart)
             {
-                reciparete = i.second;
+                reciparete = i;
                 break;
             }
         }
@@ -302,7 +331,7 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
         else
         {
             ///m_aretes.erase(reciparete); Refaire cette ligne
-            m_sommets.find(arriver)->second->erasevoisin(depart);
+            m_sommets[arriver]->erasevoisin(depart);
         }
     }
 
@@ -310,7 +339,7 @@ void Graphe::removeArete(string depart, string arriver, bool orienter)
     m_taille--;
 }
 
-Graphe Graphe::dijkstraSPT(string nomPremier)
+Graphe Graphe::dijkstraSPT(int nomPremier)
 {
     assert(findSommet(nomPremier));
 
@@ -319,43 +348,65 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
     /// IMPORTANT :
     /// On considère qu'un sommet est marquée (qu'on a trouvé son plus court chemin) si il est dans le graphe ledijkstra
 
-    map<string, pair<string, float>> distancechemins;
+    map<int, pair<int, float>> distancechemins;
     /// Distance entre le depart et le sommet
 
     for (auto &i : m_sommets)
     {
-        distancechemins.insert(make_pair(i.second->getId(), make_pair(" ", 9999)));
+        distancechemins.insert(make_pair(i->getId(), make_pair(0, 99999)));
     }
     /// On ajoute tout les chemins au ensemble d'information
 
     distancechemins.find(nomPremier)->second.second = 0;
+    distancechemins.find(nomPremier)->second.first = nomPremier;
     /// Le sommet de depart a une distance nulle à lui-même
 
-    string nomdumoment = nomPremier;
+    int nomdumoment = nomPremier;
     /// Nom du sommet selectionner
 
     do
     {
+        int poidrecip = 9999;
+        for (auto &i : distancechemins)
+        {
+            if (i.second.second < poidrecip && !ledijkstra.findSommet(i.first))
+            {
+                /// Si la distance est minimale est non marquée
+                nomdumoment = i.first;
+                poidrecip = i.second.second;
+            }
+        }
+
         for (auto &i : m_aretes)
         {
-            if (i.second->getdepart().getId() == nomdumoment && !ledijkstra.findSommet(i.second->getarriver().getId()))
+
+            if (i->getdepart().getId() == nomdumoment && !ledijkstra.findSommet(i->getarriver().getId()))
             {
                 /// Si l'arete par de notre sommet
                 /// Et i l'arete ne va pas dans un sommet deja validé par l'algorithme
                 /// On ne va pas rechecker la distance pour un sommet qui a déjà un plus court chemin
-                if (i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i.second->getarriver().getId())->second.second)
+                if (i->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getarriver().getId())->second.second)
                 {
                     /// Les sommets gardent toujours leur distance à l'origine
                     /// Si la distance à l'orgine + celle de la nouvelle arete est plus petite que la valeur precedente dans les données
                     /// Je vois pas trop comment traduire cette ligne, faut vraiment comprendre dijkstra
-                    distancechemins.find(i.second->getarriver().getId())->second.first = nomdumoment;
-                    distancechemins.find(i.second->getarriver().getId())->second.second = i.second->getpoids1() + distancechemins.find(nomdumoment)->second.second;
+                    distancechemins.find(i->getarriver().getId())->second.first = nomdumoment;
+                    distancechemins.find(i->getarriver().getId())->second.second = i->getpoids1() + distancechemins.find(nomdumoment)->second.second;
                     /// On met à jours la distance au sommet de l'indice parcouru
+                }
+            }
+
+            else if (i->getarriver().getId() == nomdumoment && !ledijkstra.findSommet(i->getdepart().getId()))
+            {
+                if (i->getpoids1() + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getdepart().getId())->second.second)
+                {
+                    distancechemins.find(i->getdepart().getId())->second.first = nomdumoment;
+                    distancechemins.find(i->getdepart().getId())->second.second = i->getpoids1() + distancechemins.find(nomdumoment)->second.second;
                 }
             }
         }
 
-        int poidrecip = 9999;
+        poidrecip = 99999;
         /// On cherche la distance minimale non déjà validée
 
         for (auto &i : distancechemins)
@@ -369,13 +420,42 @@ Graphe Graphe::dijkstraSPT(string nomPremier)
         }
 
         ///nomdumoment devient le sommet de refference et on le marque
-        ledijkstra.addSommet(nomdumoment, 0, 0);
+        //ledijkstra.afficherData();
+        ledijkstra.addSommet(nomdumoment, m_sommets[nomdumoment]->getcoordx(), m_sommets[nomdumoment]->getcoordy());
 
     } while (ledijkstra.getOrdre() != m_ordre);
 
+    cout << "Som : Pred | Dist\n";
     for (auto &i : distancechemins)
     {
         cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+    }
+
+    /// On met à jours les arêtes
+
+    vector<int> lespred;
+    for (unsigned int i = 0; i < distancechemins.size(); i++)
+    {
+        lespred.push_back(0);
+    }
+    for (auto &i : distancechemins)
+    {
+        lespred[i.first] = i.second.first;
+    }
+
+    /*
+    cerr << "LES PRED\n";
+    for (unsigned int i = 0; i < lespred.size(); i++)
+    {
+        cout << i << " " << lespred[i] << endl;
+    }*/
+
+    cout << "Les chemins : \n";
+    for (auto &i : distancechemins)
+    {
+        cout << i.first << " ";
+        pred(nomPremier, i.first, lespred);
+        cout << "en " << i.second.second << endl;
     }
 
     ///Code à faire :
@@ -389,12 +469,174 @@ void Graphe::dessinerGraphe()
 {
 
     Svgfile svg;
-    svg.addRect(0, 0, 2000, 2000, "#f8c291");
+
     svg.addGrid();
     for (auto &s : m_aretes)
-        s.second->dessiner(svg);
+        s->dessiner(svg);
     for (auto &s : m_sommets)
-        (s.second)->dessiner(svg);
+        s->dessiner(svg);
+}
 
-    dessinerCourbe(svg);
+template <typename T>
+std::string NumberToString ( T Number )
+{
+    std::ostringstream ss;
+    ss << Number;
+    return ss.str();
+}
+
+vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,float>> *total)
+{
+
+    unsigned int nb_cas = pow(2,m_taille);
+                    std::cout<<nb_cas;
+
+    vector<vector<bool>> mes_sous_graphes;
+    //clock_t start_t , end_t, total;
+    for(unsigned int i=0 ; i<nb_cas; i++)
+    {
+        vector<bool>numeration_binaire;//start_t = clock();
+        unsigned int nb_arretes = 0;
+        int number = i;
+
+        for (int j = 0 ; j < m_taille ; j++)
+        {
+            if(number%2 == 0)
+                numeration_binaire.push_back(false);
+            else
+                numeration_binaire.push_back(true);
+            nb_arretes=numeration_binaire.back()+nb_arretes;
+            number = number/2;
+
+        }
+
+        if (nb_arretes ==(m_sommets.size()-1))
+        {
+            Graphe Tampon;
+            for (int k = 0 ; k < m_ordre ; k++)
+            {
+                //std::string a = NumberToString(k);
+                Tampon.addSommet(k,m_sommets[k]->getcoordx(),m_sommets[k]->getcoordy());
+            }
+             float tab[2] = {0,0}; ///remplacer par 3 si extesions
+            for (auto &s : m_aretes)
+            {
+
+                if (numeration_binaire[s->getnom()])
+                {
+                   tab[0] += s->getpoids1();
+                   tab[1] += s->getpoids2();
+                    Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids1(),s->getpoids2(),0.0);
+                }
+            }
+
+
+            if(Tampon.test_connexite())
+            {
+                mes_sous_graphes.push_back(numeration_binaire);
+                total->push_back(make_pair(tab[0], tab[1]));
+            }
+            //end_t = clock();std::cout<<(double)end_t-start_t<<std::endl;
+        }
+    }
+
+
+    return mes_sous_graphes;
+}
+
+bool Graphe::test_connexite()
+{
+    int i=0;
+    std::unordered_set<int> cc;
+    std::unordered_set<int> sommmet_decouvert;///creation d'une liste de tout les sommet déjà decouvert
+    for(unsigned int j=0;j<m_sommets.size();j++)///lecture de sommet en sommet
+    {
+        ///condition de verification de la decouverte ou non d'un sommet
+        if(sommmet_decouvert.find(j)==sommmet_decouvert.end())
+        {
+            i++;///incrementation du nombre de graphe connexe
+            cc=m_sommets[j]->rechercherCC();///lancement de la recherche de sommmet connectés au sommet initiale
+
+            for(auto k :cc)///boucle de lecture des differents sommets connectés
+            {
+                sommmet_decouvert.insert(k);///insertion des sommets connectés dans sommet_decouvert
+            }
+        }
+    }
+    if(i!=1)
+    {
+
+        return false;
+    }
+return true;
+}
+
+Graphe Graphe::Conversion(std::vector<bool> Binaire)
+{
+    Graphe Tampon;
+            for (int k = 0 ; k < m_ordre ; k++)
+            {
+                //std::string a = NumberToString(k);
+                Tampon.addSommet(k,m_sommets[k]->getcoordx(),m_sommets[k]->getcoordy());
+            }
+            for (auto &s : m_aretes)
+            {
+
+                if (Binaire[s->getnom()])
+                {
+                    Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids1(),s->getpoids2(),0.0);
+                }
+            }
+    return Tampon;
+}
+
+pair<float,float> Graphe::DonnePoids()
+{
+    pair<float,float> total;
+     for(auto &a : m_aretes){
+
+            (total.first) += a->getpoids1();
+
+            (total.second) += a->getpoids2();
+     }
+    return total;
+}
+
+bool sortbysec(const pair<int,int> &a,
+              const pair<int,int> &b)
+{
+    return (a.first < b.first);
+}
+
+void Graphe::Pareto(vector<pair<float,float>> &total)
+{
+
+    pair<float,float> limite{60,65};
+    //pair<float,float> limite = primMST(0).DonnePoids();
+    vector<pair<float,float>> pareto;
+    pareto.push_back(make_pair(limite.first, limite.second));
+    sort(total.begin(), total.end(), sortbysec);
+
+    float maxCout2 = limite.second;
+
+    for( auto &l : total)
+    {
+
+        if(l.second < maxCout2 )
+        {
+        if(l.first == pareto.back().first)
+                pareto.pop_back();
+            pareto.push_back(make_pair(l.first, l.second));
+            maxCout2 = l.second;
+
+        }
+    }
+
+    for( auto &l : pareto)
+    cout << l.first << "et" << l.second << endl;
+
+
+
+
+
 }

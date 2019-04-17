@@ -16,3 +16,5 @@ string trouver_min(int dist[],bool sptSet[],unordered_map<string,Sommet*> lessom
     }
 }
 */
+
+/// j'essaye de crée une branche pareto

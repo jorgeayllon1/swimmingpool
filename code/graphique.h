@@ -7,13 +7,12 @@
 
 class Graphique
 {
-  public:
+public:
     Graphique();
     ~Graphique();
     void dessiner(Svgfile &svg);
-    void dessinerCourbe(Svgfile &svg);
 
-  protected:
+protected:
     std::string m_color_sommet;
     std::string m_color_arrete;
 };

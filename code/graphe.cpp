@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void pred(int sommetinit, int a, vector<int> lespred)
+void pred(int sommetinit, int a, vector<int> lespred, Graphe &ledjiskra, Graphe &origine)
 {
     if (lespred[a] == sommetinit)
     {
@@ -12,9 +12,8 @@ void pred(int sommetinit, int a, vector<int> lespred)
     }
     else
     {
-        cout << lespred[a] << " ";
         ///On affiche le precedent du sommet
-        pred(sommetinit, lespred[a], lespred);
+        pred(sommetinit, lespred[a], lespred, ledjiskra, origine);
         /// On appelle la fonction recursivement pour appeller le precedent du precedent
     }
 }
@@ -42,6 +41,29 @@ int Graphe::indicesommet(int nomsommet) const
     }
 
     throw runtime_error("indice nom trouvé");
+    return 0;
+}
+
+int Graphe::indiceareteid(int nomarete) const
+{
+    for (unsigned int i = 0; i < m_aretes.size(); i++)
+    {
+        if (nomarete == m_aretes[i]->getnom())
+            return i;
+    }
+    throw runtime_error("indice nom trouvé");
+    return 0;
+}
+
+int Graphe::getAreteid(int depart, int arriver)
+{
+    for (auto &i : m_aretes)
+    {
+        if ((i->getdepart().getId() == depart && i->getarriver().getId() == arriver) ||
+            (i->getarriver().getId() == depart && i->getdepart().getId() == arriver))
+            return i->getnom();
+    }
+    throw runtime_error("error, arete non trouvée");
     return 0;
 }
 
@@ -150,6 +172,7 @@ void Graphe::afficherData() const
 }
 
 /// Rend la copie d'un Sommet du graphe
+/*
 Sommet Graphe::getSommetid(int nomid)
 {
     if (findSommet(nomid))
@@ -159,10 +182,29 @@ Sommet Graphe::getSommetid(int nomid)
     return Sommet(*m_sommets[nomid]);
 }
 
+
+Arete Graphe::getAreteid(int nomid)
+{
+    if (findArete(nomid))
+        throw runtime_error("Id de arete non trouver : graphe.cpp getArete\nAttention, le nom de l'arete ne correspond pas forcement à son indice dans le vector du graphe");
+
+    return Arete(*m_aretes[nomid]);
+}
+*/
 void Graphe::addSommet(Sommet leclone)
 {
     m_sommets.push_back(new Sommet(leclone));
     m_ordre++;
+}
+
+bool Graphe::findArete(int nomatrouver)
+{
+    for (auto &i : m_aretes)
+    {
+        if (i->getnom() == nomatrouver)
+            return true;
+    }
+    return false;
 }
 
 bool Graphe::findSommet(int nomatrouver)
@@ -236,6 +278,7 @@ pair<float, float> Graphe::primMST(int nomPremier, int critereprim, int autrecri
         coutotautre += i->getpoids(autrecritere);
     }
 
+    leprim.dessinerGraphe();
     return make_pair(coutotprim, coutotautre);
 }
 
@@ -338,11 +381,13 @@ void Graphe::removeArete(int depart, int arriver, bool orienter)
     m_taille--;
 }
 
-Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
+float Graphe::dijkstraSPT(int nomPremier, int critere)
 {
     assert(findSommet(nomPremier));
 
     Graphe ledijkstra;
+    //ledijkstra.addSommet(nomPremier,getSommetid(nomPremier).getcoordx(),getSommetid(nomPremier).getcoordy());
+    ledijkstra.addSommet(nomPremier, m_sommets[indicesommet(nomPremier)]->getcoordx(), m_sommets[indicesommet(nomPremier)]->getcoordy());
 
     /// IMPORTANT :
     /// On considère qu'un sommet est marquée (qu'on a trouvé son plus court chemin) si il est dans le graphe ledijkstra
@@ -366,15 +411,6 @@ Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
     do
     {
         int poidrecip = 9999;
-        for (auto &i : distancechemins)
-        {
-            if (i.second.second < poidrecip && !ledijkstra.findSommet(i.first))
-            {
-                /// Si la distance est minimale est non marquée
-                nomdumoment = i.first;
-                poidrecip = i.second.second;
-            }
-        }
 
         for (auto &i : m_aretes)
         {
@@ -394,6 +430,15 @@ Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
                     /// On met à jours la distance au sommet de l'indice parcouru
                 }
             }
+
+            else if (i->getarriver().getId() == nomdumoment && !ledijkstra.findSommet(i->getdepart().getId()))
+            {
+                if (i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getdepart().getId())->second.second)
+                {
+                    distancechemins.find(i->getdepart().getId())->second.first = nomdumoment;
+                    distancechemins.find(i->getdepart().getId())->second.second = i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second;
+                }
+            }
         }
 
         poidrecip = 99999;
@@ -411,16 +456,18 @@ Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
 
         ///nomdumoment devient le sommet de refference et on le marque
         //ledijkstra.afficherData();
-        ledijkstra.addSommet(nomdumoment, m_sommets[nomdumoment]->getcoordx(), m_sommets[nomdumoment]->getcoordy());
-
+        ledijkstra.addSommet(nomdumoment, m_sommets[indicesommet(nomdumoment)]->getcoordx(), m_sommets[indicesommet(nomdumoment)]->getcoordy());
+        int nomdelarete = getAreteid(nomdumoment, distancechemins.find(nomdumoment)->second.first);
+        ledijkstra.addArete(nomdelarete, nomdumoment, distancechemins.find(nomdumoment)->second.first, m_aretes[indiceareteid(nomdelarete)]->getpoids(0), m_aretes[indiceareteid(nomdelarete)]->getpoids(1), m_aretes[indiceareteid(nomdelarete)]->getpoids(2));
     } while (ledijkstra.getOrdre() != m_ordre);
 
+    /*
     cout << "Som : Pred | Dist\n";
     for (auto &i : distancechemins)
     {
         cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
     }
-
+*/
     /// On met à jours les arêtes
 
     vector<int> lespred;
@@ -431,6 +478,12 @@ Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
     for (auto &i : distancechemins)
     {
         lespred[i.first] = i.second.first;
+    }
+
+    for (unsigned int i = 0; i < lespred.size(); i++)
+    {
+        cout << "f(" << i << ")"
+             << " = " << lespred[i] << endl;
     }
 
     /*
@@ -444,14 +497,32 @@ Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
     for (auto &i : distancechemins)
     {
         cout << i.first << " ";
-        pred(nomPremier, i.first, lespred);
+        //pred(nomPremier, i.first, lespred,ledijkstra,this);
         cout << "en " << i.second.second << endl;
     }
 
     ///Code à faire :
     ///Mettre à jours les arêtes du graphe grâce au plus court chemin
+    /*
+    for(unsigned int i=0;i< m_aretes.size();i++)
+    {
+        for(unsigned int j=0;j<m_aretes.size();j++)
+        {
+            if()
+        }
+    }
+*/
+    //return ledijkstra;
+    ledijkstra.afficherData();
+    ledijkstra.dessinerGraphe();
 
-    return ledijkstra;
+    float lecoutot = 0;
+
+    for (auto &i : ledijkstra.m_aretes)
+    {
+        lecoutot += i->getpoids(critere);
+    }
+    return lecoutot;
 }
 
 ///Graphisme

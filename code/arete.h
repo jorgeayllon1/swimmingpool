@@ -13,7 +13,7 @@ public:
   int getnom() const { return m_nom; };
   Sommet getdepart() const { return *m_depart; };
   Sommet getarriver() const { return *m_arriver; };
-  float getpoids(int i)const {return m_poids[i];};
+  float getpoids(int i) const { return m_poids[i]; };
   ~Arete();
   void afficherData() const;
   void dessiner(Svgfile &svg);

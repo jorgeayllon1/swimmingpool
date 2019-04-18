@@ -5,6 +5,7 @@
 #include "arete.h"
 #include <cassert>
 #include "graphique.h"
+#include "fonctionsutiles.h"
 ///Pour dijkstra
 #include <map>
 
@@ -20,13 +21,18 @@ public:
   void removeSommet(int lenom, bool orienter); ///Pas fini
   void removeArete(int depart, int arriver, bool orienter);
   int getOrdre() { return m_ordre; };
-  Sommet getSommetid(int nomid);
-  Graphe dijkstraSPT(int nompremier, int critere);
+  int getTaille() { return m_taille; };
+  int getAreteid(int depart, int arriver);
+  //Sommet getSommetid(int nomid);
+  float dijkstraSPT(int nompremier, int critere);
   int indicesommet(int nomsommet) const;
+  int indiceareteid(int nomarete) const;
   /// tuple utilisable ??
   /// Peut être list<tuple>
   std::pair<float, float> primMST(int nomPremier, int critereprim, int autrecritere);
   bool findSommet(int nomatrouver);
+  bool findArete(int nomatrouver);
+  //void pred(int sommetinit, int a, vector<int> lespred, Graphe &ledjiskra, Graphe &origine)
   ~Graphe();
 
   //graphisme

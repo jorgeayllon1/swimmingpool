@@ -153,7 +153,7 @@ void Graphe::afficherData() const
 Sommet Graphe::getSommetid(int nomid)
 {
     if (findSommet(nomid))
-        throw runtime_error("Id de sommet non trouver : graphe.cpp getSommetid");
+        throw runtime_error("Id de sommet non trouver : graphe.cpp getSommetid\nAttention, le nom du sommet ne correspond pas forcement à son indice dans le vector du graphe");
 
     /// On appelle le constructeur de copie
     return Sommet(*m_sommets[nomid]);
@@ -177,7 +177,7 @@ bool Graphe::findSommet(int nomatrouver)
     return false;
 }
 
-Graphe Graphe::primMST(int nomPremier, int critere)
+pair<float, float> Graphe::primMST(int nomPremier, int critereprim, int autrecritere)
 {
     assert(findSommet(nomPremier));
     /// Initialisation
@@ -201,10 +201,10 @@ Graphe Graphe::primMST(int nomPremier, int critere)
             /// On a la validité des arêtes en checkant l'arbre avec des objets du graphe(cette phrase est important mais très tricky)
             if (leprim.findSommet(i->getdepart().getId()) ^ leprim.findSommet(i->getarriver().getId()))
             {
-                if (poidsMin > i->getpoids(critere))
+                if (poidsMin > i->getpoids(critereprim))
                 {
                     reciparete = *i;
-                    poidsMin = i->getpoids(critere);
+                    poidsMin = i->getpoids(critereprim);
                 }
             }
         }
@@ -227,14 +227,16 @@ Graphe Graphe::primMST(int nomPremier, int critere)
 
     } while (leprim.getOrdre() != m_ordre);
     /// Tant que l'arbre n'a pas le même degré que le graphe
-/*
-    int coutot = 0;
+
+    float coutotprim = 0;
+    float coutotautre = 0;
     for (auto &i : leprim.m_aretes)
     {
-        coutot += i->getpoids(critere);
+        coutotprim += i->getpoids(critereprim);
+        coutotautre += i->getpoids(autrecritere);
     }
-    */
-    return leprim;
+
+    return make_pair(coutotprim, coutotautre);
 }
 
 Graphe::~Graphe()
@@ -336,7 +338,7 @@ void Graphe::removeArete(int depart, int arriver, bool orienter)
     m_taille--;
 }
 
-Graphe Graphe::dijkstraSPT(int nomPremier,int critere)
+Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
 {
     assert(findSommet(nomPremier));
 
@@ -392,7 +394,6 @@ Graphe Graphe::dijkstraSPT(int nomPremier,int critere)
                     /// On met à jours la distance au sommet de l'indice parcouru
                 }
             }
-
         }
 
         poidrecip = 99999;

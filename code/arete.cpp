@@ -12,21 +12,22 @@ Arete::Arete() : m_nom(0), m_depart(NULL), m_arriver(NULL)
 
 Arete::Arete(int lenom, Sommet *depart, Sommet *arriver, float lepoids1, float lepoids2, float lepoids3) : m_nom(lenom), m_depart(depart), m_arriver(arriver)
 {
-    m_poids[0]=lepoids1;
-    m_poids[1]=lepoids2;
-    m_poids[2]=lepoids3;
+    m_poids[0] = lepoids1;
+    m_poids[1] = lepoids2;
+    m_poids[2] = lepoids3;
 }
 
 void Arete::afficherData() const
 {
-    cout << "Je suis " << m_nom << " : De " << m_depart->getId() << " a " << m_arriver->getId() << " en ( " << m_poids1 << " , " << m_poids2 << " )" << endl;
+    cout << "Je suis " << m_nom << " : De " << m_depart->getId() << " a " << m_arriver->getId() << " en ( " << m_poids[0] << " , " << m_poids[1] << " )" << endl;
 }
 
-Arete::Arete(Arete const &copie) : m_nom(copie.m_nom),m_depart(copie.m_depart), m_arriver(copie.m_arriver), m_poids1(copie.m_poids1)
+Arete::Arete(Arete const &copie) : m_nom(copie.m_nom), m_depart(copie.m_depart), m_arriver(copie.m_arriver)
 {
-     for(unsigned int i=0;i<4;i++)
+    /// On a 3 parametre donc on inscrit une valeur fini dans le code source
+    for (unsigned int i = 0; i < 4; i++)
     {
-        m_poids[i]=copie.m_poids[i];
+        m_poids[i] = copie.m_poids[i];
     }
 }
 
@@ -44,7 +45,7 @@ void Arete::dessiner(Svgfile &svg)
 void Arete::draw(BITMAP *arbo)
 {
 
-    line(arbo,m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), makecol(229, 80, 57));
+    line(arbo, m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), makecol(229, 80, 57));
 
     string cout1 = NumberToString(m_poids[0]);
     string cout2 = NumberToString(m_poids[1]);
@@ -55,12 +56,11 @@ void Arete::draw(BITMAP *arbo)
         val = val + ";" + cout3;
     }
     const char *cstr = val.c_str();
-    textprintf_centre_ex(arbo,font, (m_depart->getcoordx() + m_arriver->getcoordx()) / 2 , (m_depart->getcoordy() + m_arriver->getcoordy()) / 2 ,makecol(60, 99, 130), -1, cstr);
+    textprintf_centre_ex(arbo, font, (m_depart->getcoordx() + m_arriver->getcoordx()) / 2, (m_depart->getcoordy() + m_arriver->getcoordy()) / 2, makecol(60, 99, 130), -1, cstr);
 }
 
 void Arete::drawS(BITMAP *arbo)
 {
 
-    line(arbo,m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), makecol(125, 95, 255));
-
+    line(arbo, m_depart->getcoordx(), m_depart->getcoordy(), m_arriver->getcoordx(), m_arriver->getcoordy(), makecol(125, 95, 255));
 }

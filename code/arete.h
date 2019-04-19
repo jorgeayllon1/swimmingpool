@@ -1,6 +1,5 @@
 #ifndef ARETE_H
 #define ARETE_H
-#include <iostream>
 #include "sommet.h"
 #include <string>
 #include "graphique.h"
@@ -14,9 +13,7 @@ public:
   int getnom() const { return m_nom; };
   Sommet getdepart() const { return *m_depart; };
   Sommet getarriver() const { return *m_arriver; };
-  float getpoids1() const { return m_poids1; };
-  float getpoids2() const { return m_poids2; };
-  float getpoids(int i)const {return m_poids[i];};
+  float getpoids(int i) const { return m_poids[i]; };
   ~Arete();
   void afficherData() const;
   void dessiner(Svgfile &svg);
@@ -28,9 +25,6 @@ private:
   Sommet *m_depart;
   Sommet *m_arriver;
   float m_poids[4];
-  float m_poids1;
-  float m_poids2;
-  float m_poids3;
 };
 
 #endif

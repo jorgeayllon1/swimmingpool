@@ -34,7 +34,7 @@ public:
   int getcoordy() const { return m_coordy; };
   bool findVoisin(int lenom) const;
 
-  std::unordered_set<int> rechercherCC();
+  //std::unordered_set<int> rechercherCC();
   std::unordered_map<int,int> parcoursBFS();
 
 private:

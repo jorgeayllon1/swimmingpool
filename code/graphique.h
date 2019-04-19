@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #ifndef GRAPHIQUE_H
 #define GRAPHIQUE_H
 #include <iostream>

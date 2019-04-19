@@ -27,7 +27,10 @@ public:
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };
   int getcoordy() const { return m_coordy; };
+  int getdegres() const { return m_degre; };
+
   bool findVoisin(int lenom) const;
+  std::unordered_set<int> parcoursBFS();
 
 private:
   int m_id;

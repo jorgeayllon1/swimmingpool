@@ -35,6 +35,14 @@ public:
   //void pred(int sommetinit, int a, vector<int> lespred, Graphe &ledjiskra, Graphe &origine)
   ~Graphe();
 
+  bool test_connexite();
+
+  std::vector<std::vector<bool>> calcul_sousgraphes_admissibles(std::vector<std::pair<float,float>> *total,bool cycle);
+  Graphe Conversion(std::vector<bool> Binaire);
+  void Pareto(std::vector<std::pair<float,float>> &total);
+  std::pair<float,float> DonnePoids();
+  int Temps_Parcours();
+  bool check();
   //graphisme
   void dessinerGraphe();
 

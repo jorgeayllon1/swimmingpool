@@ -284,8 +284,10 @@ pair<float, float> Graphe::primMST(int nomPremier, int critereprim, int autrecri
 
 Graphe::~Graphe()
 {
-    ///Ca veut dire quoi dtor ?
-    ///Ah ok, c'est destructor
+       for(unsigned int i=0;i<m_sommets.size();i++)
+        delete(m_sommets[i]);
+       for(unsigned int i=0;i<m_aretes.size();i++)
+        delete(m_aretes[i]);
 }
 
 void Graphe::removeSommet(int lenom, bool orienter)
@@ -480,11 +482,11 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
         lespred[i.first] = i.second.first;
     }
 
-    for (unsigned int i = 0; i < lespred.size(); i++)
+    /*for (unsigned int i = 0; i < lespred.size(); i++)
     {
         cout << "f(" << i << ")"
              << " = " << lespred[i] << endl;
-    }
+    }*/
 
     /*
     cerr << "LES PRED\n";
@@ -493,13 +495,13 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
         cout << i << " " << lespred[i] << endl;
     }*/
 
-    cout << "Les chemins : \n";
+   /* cout << "Les chemins : \n";
     for (auto &i : distancechemins)
     {
         cout << i.first << " ";
         //pred(nomPremier, i.first, lespred,ledijkstra,this);
         cout << "en " << i.second.second << endl;
-    }
+    }*/
 
     ///Code à faire :
     ///Mettre à jours les arêtes du graphe grâce au plus court chemin
@@ -513,14 +515,14 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
     }
 */
     //return ledijkstra;
-    ledijkstra.afficherData();
-    ledijkstra.dessinerGraphe();
+    //ledijkstra.afficherData();
+    //ledijkstra.dessinerGraphe();
 
     float lecoutot = 0;
 
-    for (auto &i : ledijkstra.m_aretes)
+    for (auto &i : distancechemins)
     {
-        lecoutot += i->getpoids(critere);
+        lecoutot +=  i.second.second;
     }
     return lecoutot;
 }
@@ -536,4 +538,195 @@ void Graphe::dessinerGraphe()
         s->dessiner(svg);
     for (auto &s : m_sommets)
         s->dessiner(svg);
+}
+vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,float>> *total,bool cycle)
+{
+
+    unsigned int nb_cas = pow(2,m_taille);
+    //std::cout<<nb_cas;
+    vector<vector<bool>> mes_sous_graphes;
+    //clock_t start_t, end_t;
+
+    for(unsigned int i=0 ; i<nb_cas; i++)
+    {
+        vector<bool>numeration_binaire;
+        unsigned int nb_arretes = 0;
+        int number = i;
+
+        for (int j = 0 ; j < m_taille ; j++)
+        {
+            if(number%2 == 0)
+                numeration_binaire.push_back(false);
+            else
+                numeration_binaire.push_back(true);
+            nb_arretes=numeration_binaire.back()+nb_arretes;
+            number = number/2;
+
+        }
+
+        if ((nb_arretes==(m_sommets.size()-1)&&!(cycle)) ||  (nb_arretes>=(m_sommets.size()-1)&&(cycle)))// && test_connexite_preventif())
+        //if ((nb_arretes==(m_sommets.size()-1)))
+        {
+            // if ( std::bitset<32>(i).count() == (m_sommets.size()-1))
+            // {
+            //cout << std::bitset<32>(i) <<endl;
+
+            //numeration_binaire.push_back(std::bitset<32>(i));
+
+            //numeration_binaire=std::bitset<32>(i);
+            //start_t = clock();
+            Graphe Tampon;
+            for (int k = 0 ; k < m_ordre ; k++)
+            {
+                Tampon.addSommet(k,m_sommets[k]->getcoordx(),m_sommets[k]->getcoordy());
+            }
+            float tab[2] = {0,0}; ///remplacer par 3 si extesions
+            for (auto &s : m_aretes)
+            {
+                if (numeration_binaire[s->getnom()])
+                {
+                    tab[0] += s->getpoids(0);
+                    //if(!cycle)
+                    tab[1] += s->getpoids(1);
+                    Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids(0),s->getpoids(1),0.0);
+                }
+            }
+            if(Tampon.check())
+            {
+                if(Tampon.test_connexite())
+                {
+                if(cycle)
+                {
+                    tab[1]=Tampon.Temps_Parcours();
+                    //cout<<tab[1]<<endl;
+                }
+                mes_sous_graphes.push_back(numeration_binaire);
+                total->push_back(make_pair(tab[0], tab[1]));
+                //Tampon.dessinerGraphe();
+                if(i%10000==0)
+                    cout<<i<<endl;
+                }
+            }
+             (numeration_binaire).erase(numeration_binaire.begin(),numeration_binaire.end());
+        }
+    }
+   return mes_sous_graphes;
+}
+bool Graphe::test_connexite()
+{
+    int i=0;
+    std::unordered_set<int> cc;
+    std::unordered_set<int> sommmet_decouvert;///creation d'une liste de tout les sommet déjà decouvert
+    for(unsigned int j=0; j<m_sommets.size(); j++) ///lecture de sommet en sommet
+    {
+        ///condition de verification de la decouverte ou non d'un sommet
+        if(sommmet_decouvert.find(j)==sommmet_decouvert.end())
+        {
+            i++;///incrementation du nombre de graphe connexe
+            cc=m_sommets[j]->parcoursBFS();///lancement de la recherche de sommmet connectés au sommet initiale
+
+            for(auto k :cc)///boucle de lecture des differents sommets connectés
+            {
+                sommmet_decouvert.insert(k);///insertion des sommets connectés dans sommet_decouvert
+            }
+        }
+    }
+    if(i!=1)
+    {
+        return false;
+    }
+    return true;
+}
+
+Graphe Graphe::Conversion(std::vector<bool> Binaire)
+{
+    Graphe Tampon;
+    for (int k = 0 ; k < m_ordre ; k++)
+    {
+        Tampon.addSommet(k,m_sommets[k]->getcoordx(),m_sommets[k]->getcoordy());
+    }
+    for (auto &s : m_aretes)
+    {
+        if (Binaire[s->getnom()])
+        {
+            Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids(0),s->getpoids(1),0.0);
+        }
+    }
+    return Tampon;
+}
+
+pair<float,float> Graphe::DonnePoids()
+{
+    pair<float,float> total;
+    for(auto &a : m_aretes)
+    {
+
+        (total.first) += a->getpoids(0);
+
+        (total.second) += a->getpoids(1);
+    }
+    return total;
+}
+
+bool sortbysec(const pair<int,int> &a,const pair<int,int> &b)
+{
+    return (a.first < b.first);
+}
+
+void Graphe::Pareto(vector<pair<float,float>> &total)//,std::vector<std::pair<float,float>> *nonPareto)
+{
+
+    //pair<float,float> limite = primMST(0,0,1);
+    //cout << "litme :" << limite.first << "et" << limite.second << endl;
+    //pair<float,float> limite = primMST(0,0,0).DonnePoids();
+    vector<pair<float,float>> pareto;
+
+
+    pareto.push_back(make_pair(0,0));
+    bool test = true;
+    sort(total.begin(), total.end(), sortbysec);
+
+    float maxCout2 = 99999999;
+
+    for( auto &l : total)
+    {
+
+        if(l.second < maxCout2 )
+        {
+        if(l.first == pareto.back().first)
+            pareto.pop_back();
+
+            pareto.push_back(make_pair(l.first, l.second));
+            maxCout2 = l.second;
+        }
+  //      else
+//            nonPareto->push_back(make_pair(l.first, l.second));
+    }
+
+    for( auto &l : pareto)
+    cout << "pareto :" << l.first << "et" << l.second << endl;
+
+
+//return pareto;
+
+
+}
+int Graphe::Temps_Parcours()
+{
+    int s = 0;
+    for (int k = 0 ; k < m_ordre ; k++)
+        {
+            s += dijkstraSPT(k,1);
+        }
+    return s;
+}
+
+bool Graphe::check()
+{
+    for(auto &i :m_sommets)
+    {
+        if(i->getdegres() == 0)
+            return false;
+    }
+    return true;
 }

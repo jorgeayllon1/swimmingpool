@@ -525,6 +525,95 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
     return lecoutot;
 }
 
+bool sortbydegre(const Sommet *a, const Sommet *b)
+{
+    return (a->getdegre() > b->getdegre());
+}
+
+int Graphe::welshpowel()
+{
+    int nbdecoul = 0;
+
+    list<Sommet *> laliste;
+    int pluspetitecouleur = 1;
+    Sommet *recipsommet;
+    /// Attention, laliste controle le graphe generale
+    /// Il a accé au pointeur
+    for (auto &i : m_sommets)
+    {
+        laliste.push_back(i);
+    }
+
+    laliste.sort(sortbydegre);
+
+    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
+    {
+        cout << "id : " << (*it)->getId() << " couleur : " << (*it)->getcouleur() << endl;
+    }
+    cout << endl;
+
+    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
+    {
+        if ((*it)->getcouleur() == 0)
+        {
+            (*it)->setcouleur(pluspetitecouleur);
+            recipsommet = (*it);
+            break;
+        }
+    }
+/*
+    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
+    {
+        if ((*it)->getcouleur() == 0)
+        {
+            recipsommet = (*it);
+        }
+    }
+*/
+    for(list<Sommet*>::iterator it = find(laliste.begin(),laliste.end(),recipsommet);it!=laliste.end();++it)
+    {
+        if(*it==recipsommet)continue;
+        cout<<(*it)->getId()<<" coul : "<<(*it)->getcouleur()<<endl;
+    }
+
+    //recipsommet->setcouleur(pluspetitecouleur);
+
+    ///boucle qui commence depuis le sommet du dessus
+    /*for (list<Sommet *>::iterator it = find(laliste.begin(), laliste.end(), recipsommet); it != laliste.end(); ++it)
+    {
+
+        if ((*it)->getcouleur() == 0)
+        {
+            (*it)->setcouleur(pluspetitecouleur);
+        }
+    }*/
+
+    /// si i->getcouleur ==0 et non adjacent à recipsommet
+    /// ! i.adjsommetcol(pluspetitecouleur)
+
+    bool sommetnoncol = false;
+
+    for (auto &i : laliste)
+    {
+        if (i->getdegre() == 0)
+        {
+            sommetnoncol = true;
+        }
+        break;
+    }
+
+    ///while ( sommetnoncol == true)
+
+    /// ///////////////////////
+    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
+    {
+        cout << "id : " << (*it)->getId() << " couleur : " << (*it)->getcouleur() << endl;
+    }
+    /// /////////////////////
+
+    return nbdecoul;
+}
+
 ///Graphisme
 void Graphe::dessinerGraphe()
 {

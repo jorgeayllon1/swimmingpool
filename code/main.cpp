@@ -6,9 +6,7 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	Graphe espace("files/manhattan.txt", "files/manhattan_weights_0.txt");
-	int fin = espace.dijkstraSPT(12, 0);
-	cout << "le cout total est " << fin << endl;
-
+	Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
+	int a = espace.welshpowel();
 	return 0;
 }

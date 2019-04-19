@@ -6,6 +6,7 @@ using namespace std;
 void Sommet::afficherData() const
 {
     cout << "Mon id est " << m_id << endl
+         << "Je suis de couleur : " << m_couleur << endl
          << "Je suis de degré " << m_degre << endl
          << "Je suis en "
          << "( " << m_coordx << " , " << m_coordy << " )\n"
@@ -31,7 +32,7 @@ void Sommet::afficherData() const
 void Sommet::addVoisin(Sommet *levoisin)
 {
     bool trouve = false;
-    
+
     for (auto &i : m_voisins)
     {
         if (i->getId() == levoisin->getId())
@@ -44,14 +45,14 @@ void Sommet::addVoisin(Sommet *levoisin)
     if (!trouve)
     {
         m_voisins.push_back(levoisin);
-        sort(m_voisins.begin(),m_voisins.end());
+        sort(m_voisins.begin(), m_voisins.end());
         m_degre++;
     }
-    else throw runtime_error("Error tu ajoutes un voisin qui n'existe pas\n");
-
+    else
+        throw runtime_error("Error tu ajoutes un voisin qui n'existe pas\n");
 }
 
-Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_valeurrelative(copie.m_valeurrelative),
+Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_couleur(copie.m_couleur),
                                       m_voisins(copie.m_voisins), m_degre(copie.m_degre), m_coordx(copie.m_coordx), m_coordy(copie.m_coordy)
 {
     /// La ligne m_voisins(copie.m_voisins) est très puissante

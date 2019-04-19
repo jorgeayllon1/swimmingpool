@@ -13,16 +13,19 @@
 class Sommet : public Graphique
 {
 public:
-  Sommet() : m_id(0), m_valeurrelative(0), m_degre(0), m_coordx(0), m_coordy(0){};
-  Sommet(int nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
+  Sommet() : m_id(0), m_couleur(0), m_degre(0), m_coordx(0), m_coordy(0){};
+  Sommet(int nom, int lacoordx, int lacoordy) : m_id(nom), m_couleur(0),
                                                 m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
   ~Sommet(){};
   void afficherData() const;
   int getId() const { return m_id; };
   void addVoisin(Sommet *levoisin);
-  void setvaleurrelative(int val) { m_valeurrelative = val; };
-  int getvaleurrelative() const { return m_valeurrelative; };
+  //void setvaleurrelative(int val) { m_valeurrelative = val; };
+  int getdegre() const { return m_degre; };
+  /// Pour le welsh powel
+  int getcouleur() const { return m_couleur; };
+  void setcouleur(int valeurcoul) { m_couleur = valeurcoul; };
   void erasevoisin(int lenom);
   void dessiner(Svgfile &svg);
   int getcoordx() const { return m_coordx; };
@@ -31,7 +34,7 @@ public:
 
 private:
   int m_id;
-  int m_valeurrelative; /// Poids temp pour Prim algo
+  int m_couleur; /// Poids temp pour Prim algo
   /// J'ai mis unordered_set au lieu de vector car on a pas besoin de classer les voisins
   /// On a un meilleur accé au valeur grâce à unordered_set
   std::vector<Sommet *> m_voisins;

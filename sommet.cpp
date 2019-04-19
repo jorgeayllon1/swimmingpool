@@ -44,10 +44,12 @@ void Sommet::addVoisin(Sommet *levoisin)
 
     if (!trouve)
     {
-
         m_voisins.push_back(levoisin);
+        sort(m_voisins.begin(),m_voisins.end());
         m_degre++;
     }
+    else throw runtime_error("Error tu ajoutes un voisin qui n'existe pas\n");
+
 }
 
 Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_valeurrelative(copie.m_valeurrelative),
@@ -88,6 +90,16 @@ void Sommet::dessiner(Svgfile &svg)
     svg.addDisk(m_coordx, m_coordy, 5, "black");
 }
 
+bool Sommet::findVoisin(int lenom) const
+{
+    for (auto &i : m_voisins)
+    {
+        if (i->getId() == lenom)
+            return true;
+    }
+    return false;
+}
+
 std::unordered_set<int> Sommet::parcoursBFS() {
 
     //std::unordered_map<int,int> l_pred;
@@ -117,4 +129,3 @@ std::unordered_set<int> Sommet::parcoursBFS() {
     //std::unordered_set<int> sommets = sommets_decouverts.first;
     return sommets;///on retourne l'unordered_map l_pred
 }
-

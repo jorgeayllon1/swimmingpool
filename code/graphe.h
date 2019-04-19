@@ -35,7 +35,6 @@ public:
   int getAreteid(int depart, int arriver);
   //Sommet getSommetid(int nomid);
   float dijkstraSPT(int nompremier, int critere);
-  int indicesommet(int nomsommet) const;
   int indiceareteid(int nomarete) const;
   bool findSommet(int nomatrouver);
   bool findArete(int nomatrouver);

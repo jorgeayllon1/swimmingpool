@@ -16,6 +16,7 @@ public:
   Graphe() : m_ordre(0), m_taille(0){};
   Graphe(std::string nom_graphe,std::string nom_poids_graphe);
   void afficherData() const;
+  int indicesommet(int nomsommet) const;
   void addSommet(int lenom, int coordx, int coordy);
   void addSommet(Sommet leclone);
   void addArete(int lenom,int leiddepart,int leidarriver, float poids1, float poids2, float poids3);
@@ -26,14 +27,22 @@ public:
   Graphe dijkstraSPT(int nompremier);
   /// tuple utilisable ??
   /// Peut être list<tuple>
-  Graphe primMST(int nomPremier);
-  bool findSommet(int nomatrouver);
+Graphe primMST(int nomPremier, int critereprim, int autrecritere);
+
+bool findSommet(int nomatrouver);
+ vector<vector<bool>>calcul_sousgraphes_admissibles(vector<pair<float,float>> *total,bool cycle);
+  bool test_connexite();
+  Graphe Conversion(std::vector<bool> Binaire);
+  vector<pair<float,float>> Pareto(std::vector<std::pair<float,float>> &total,std::vector<std::pair<float,float>> *nonPareto);
+  std::pair<float,float> DonnePoids();
 
   ~Graphe();
+  bool check();
 
   //graphisme
   void dessinerGraphe();
   void drawGraphe(BITMAP *arbo);
+  void drawSousGraphe(BITMAP *arborescence);
 
 private:
   std::vector<Sommet *> m_sommets;

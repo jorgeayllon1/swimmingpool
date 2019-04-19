@@ -6,6 +6,9 @@
 #include <string>
 #include <allegro.h>
 #include <sstream>
+#include <vector>
+
+using namespace std;
 
 template <typename T>
   std::string NumberToString ( T Number )
@@ -21,6 +24,8 @@ public:
     Graphique();
     ~Graphique();
     void dessiner(Svgfile &svg);
+    void drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<pair<float,float>> &nonPareto);
+    int menuInterne(BITMAP *page);
 
 protected:
     std::string m_color_sommet;

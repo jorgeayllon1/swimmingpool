@@ -4,7 +4,7 @@
 	"graphe.h"
 	<set>
 
-1555537307 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.h
+1555681980 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.h
 	<iostream>
 	<string>
 	"sommet.h"
@@ -14,7 +14,7 @@
 	<algorithm>
 	<map>
 
-1555536376 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.h
+1555680609 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.h
 	<iostream>
 	<string>
 	<vector>
@@ -28,46 +28,50 @@
 	<fstream>
 	<set>
 
-1555538014 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.h
+1555668748 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.h
 	<iostream>
 	<unordered_map>
 	<unordered_set>
 	<string>
 	<allegro.h>
 	<sstream>
+	<vector>
 
-1555538810 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.h
+1555622168 c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.h
 	<iostream>
 	"sommet.h"
 	<string>
 	"graphique.h"
 
-1555540424 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.cpp
+1555621981 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\arete.cpp
 	"arete.h"
 
-1555538795 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.cpp
+1555683358 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphe.cpp
 	"graphe.h"
 	<fstream>
 	<allegro.h>
 	<sstream>
+	<bitset>
 
-1555538014 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.cpp
+1555679294 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\graphique.cpp
 	"graphe.h"
 	"graphique.h"
 	"svgfile.h"
 
-1555540503 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.cpp
+1555541705 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\sommet.cpp
 	"sommet.h"
 	<random>
+	<queue>
 
 1555523511 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\svgfile.cpp
 	<iostream>
 	<sstream>
 
-1555537345 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\main.cpp
+1555683486 source:c:\users\olivi\desktop\cpp\swimmingpool\piscinealleg\swimmingpool\code\main.cpp
 	"graphe.h"
 	<random>
 	"time.h"
 	<allegro.h>
 	<time.h>
+	<bitset>
 

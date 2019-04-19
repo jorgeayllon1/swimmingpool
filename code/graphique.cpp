@@ -19,7 +19,8 @@ int Graphique::menuInterne(BITMAP *page)
 {
        BITMAP *prim;
        prim =load_bitmap("image/prim.bmp",NULL);
-    if (!prim)  {
+    if (!prim)
+    {
         allegro_message("pas pu trouver/charger mon_image.bmp");
         allegro_exit(); exit(EXIT_FAILURE);
     }
@@ -29,18 +30,19 @@ int Graphique::menuInterne(BITMAP *page)
     int startY = SCREEN_H/2 + 100;
     int finY = startY + 50;
     int CHOIX =4;
+    int couleurBouton = makecol(119, 140, 163);
 
 
-    rectfill(page, startX,startY, finX, startY + 50, makecol(126, 255, 245));
+    rectfill(page, startX,startY, finX, startY + 50, couleurBouton);
     rect(page, startX,startY, finX, startY + 50, makecol(0,0,0));
 
-    rectfill(page, startX,startY+50, finX, startY + 100, makecol(126, 255, 245));
+    rectfill(page, startX,startY+50, finX, startY + 100,couleurBouton);
     rect(page, startX,startY+50, finX, startY + 100, makecol(0,0,0));
 
-    rectfill(page, startX,startY+100, finX, startY + 150, makecol(126, 255, 245));
+    rectfill(page, startX,startY+100, finX, startY + 150,couleurBouton);
     rect(page, startX,startY+100, finX, startY + 150, makecol(0,0,0));
 
-    rectfill(page, startX,startY+150, finX, startY + 200, makecol(126, 255, 245));
+    rectfill(page, startX,startY+150, finX, startY + 200, couleurBouton);
     rect(page, startX,startY+150, finX, startY + 200, makecol(0,0,0));
 
 
@@ -61,14 +63,14 @@ void Graphique::drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<
     int longGraph = 300;
     int originX = 50;
     int origineY = SCREEN_H/2 - 100;
-    rectfill(arbo, 0,0, arbo->w, arbo->h, makecol(248, 194, 145));
+    //rectfill(arbo, 0,0, arbo->w, arbo->h, makecol(248, 194, 145));
     int coef = 10;
     //void floodfill(BITMAP *bmp, int x, int y, int color);
 
     line(arbo,originX,origineY,originX ,  origineY-longGraph, makecol(0,0,0)); /// ligne vertical
     line(arbo,originX , origineY,originX+longGraph , origineY, makecol(0,0,0)); /// ligne Horizontal
 
-    textprintf_centre_ex(arbo,font,  originX -25 ,  origineY-longGraph ,   makecol(10, 61, 98),-1,"cout 1");
+    textprintf_centre_ex(arbo,font,  originX  ,  origineY-longGraph ,   makecol(10, 61, 98),-1,"cout 1");
     textprintf_centre_ex(arbo,font,  originX+longGraph , origineY +5 ,   makecol(10, 61, 98),-1,"cout 2");
 
 
@@ -84,3 +86,15 @@ for(auto &p : pareto)
 
 
 }
+
+//int Graphique::fairePrim()
+//{
+//    bool continu = true;
+//    while(continu = true)
+//    {
+//        (this.primMST(0,1,0)).drawGraphe(supportGraphe);
+//         (this.primMST(0,0,1)).drawGraphe(supportCourbe);
+//    }
+//
+//    return
+//}

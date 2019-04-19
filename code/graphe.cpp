@@ -471,7 +471,7 @@ Graphe::~Graphe()
   // swap trick pour vider le vector et liberer la memoire
   std::vector<Sommet*>().swap(m_sommets);
 
-std::for_each( m_aretes.begin(), m_aretes.end(), DeleteFunctor<Arete>() );
+    std::for_each( m_aretes.begin(), m_aretes.end(), DeleteFunctor<Arete>() );
 
   // swap trick pour vider le vector et liberer la memoire
   std::vector<Arete*>().swap(m_aretes);
@@ -487,13 +487,16 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
 {
 
     unsigned int nb_cas = pow(2,m_taille);
-    //std::cout<<nb_cas <<endl;
+    std::cout<<nb_cas <<endl;
     vector<vector<bool>> mes_sous_graphes;
     clock_t start_t, end_t;
     start_t = clock();
 
+
+
     for(unsigned int i=0 ; i<nb_cas; i++)
     {
+
         vector<bool>numeration_binaire;
         unsigned int nb_arretes = 0;
         int number = i;
@@ -508,16 +511,19 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
             number = number/2;
 
         }
+    if(i%1000000 == 0)
+            cout<< i << endl;
 
         if ((nb_arretes==(m_sommets.size()-1)&&!(cycle)) ||  (nb_arretes>=(m_sommets.size()-1)&&(cycle)))// && test_connexite_preventif())
         //if ((nb_arretes==(m_sommets.size()-1)))
         {
-
-            Graphe Tampon;
+             Graphe Tampon;
             for (int k = 0 ; k < m_ordre ; k++)
             {
                 Tampon.addSommet(k,m_sommets[k]->getcoordx(),m_sommets[k]->getcoordy());
             }
+
+
             float tab[2] = {0,0}; ///remplacer par 3 si extesions
             for (auto &s : m_aretes)
             {
@@ -526,6 +532,7 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
                     for(int u= 0; u<2;u++)
                     tab[u] += s->getpoids(u);
                    // if(!cycle)
+                    //Tampaddvoisin(s->getarriver());
                     Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids(0),s->getpoids(1),0.0);
                 }
             }
@@ -533,6 +540,7 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
             {
                 if(Tampon.test_connexite())
                 {
+
 //        if(cycle)
 //        {
 //            tab[1]=Tampon.Temps_Parcours();
@@ -542,8 +550,10 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
                 total->push_back(make_pair(tab[0], tab[1]));
              }
             }
+
         }
          //cout << i << endl;
+         std::vector<bool>().swap(numeration_binaire);
     }
 
     end_t = clock();
@@ -634,7 +644,7 @@ vector<pair<float,float>> Graphe::Pareto(vector<pair<float,float>> &total,std::v
     vector<pair<float,float>> pareto;
 
 
-    pareto.push_back(make_pair(0, 0));
+    pareto.push_back(make_pair(0,0));
     bool test = true;
     sort(total.begin(), total.end(), sortbysec);
 
@@ -647,10 +657,6 @@ vector<pair<float,float>> Graphe::Pareto(vector<pair<float,float>> &total,std::v
         {
         if(l.first == pareto.back().first)
             pareto.pop_back();
-
-        if(test == true){
-            pareto.pop_back();
-            test = false;}
 
             pareto.push_back(make_pair(l.first, l.second));
             maxCout2 = l.second;

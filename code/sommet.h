@@ -15,7 +15,7 @@ public:
   Sommet(int nom, int lacoordx, int lacoordy) : m_id(nom), m_valeurrelative(0),
                                                         m_degre(0), m_coordx(lacoordx), m_coordy(lacoordy){};
   Sommet(Sommet const &copie);
-  ~Sommet(){};
+  ~Sommet();
   void afficherData() const;
   int getId() const { return m_id; };
   void addVoisin(Sommet *levoisin);

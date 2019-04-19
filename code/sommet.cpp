@@ -25,6 +25,11 @@ void Sommet::afficherData() const
     }
 }
 
+Sommet::~Sommet()
+{
+
+}
+
 ///Attention, cette fonction ne crée pas d'arête entre les deux sommets
 /// TRES IMPORTANT ! : Lors de la recherche dans m_voisins
 /// Il faut checker le string associer au sommet et non le sommet lui-même
@@ -70,11 +75,10 @@ void Sommet::erasevoisin(int lenom)
     /// C'est plus securisé pour la memoire
     for (auto &i : m_voisins)
     {
-        if (i->getId() == lenom)
-        {
+
             recip = i;
             break;
-        }
+
     }
     if (recip)
     {
@@ -130,6 +134,7 @@ void Sommet::dessiner(Svgfile &svg)
 
 void Sommet::draw(BITMAP *arbo)
 {
+    int color = makecol(223, 230, 233);
         FONT *myfont;
 
       myfont = load_font("image/fontComic16.pcx", NULL, NULL);
@@ -142,6 +147,6 @@ void Sommet::draw(BITMAP *arbo)
     string texte = NumberToString(m_id);
     const char *cstr = texte.c_str();
     circle(arbo,m_coordx, m_coordy, 15, makecol(10, 61, 98));
-    circlefill(arbo,m_coordx, m_coordy, 13, makecol(248, 194, 145));
+    circlefill(arbo,m_coordx, m_coordy, 13, color);
     textprintf_centre_ex(arbo,myfont,m_coordx,m_coordy-12,makecol(10, 61, 98),-1,cstr);
 }

@@ -15,7 +15,7 @@ void initialisation()
 
 
         set_color_depth(desktop_color_depth());
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,1000,800,0,0)!=0)
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,1000,768,0,0)!=0)
     {
         allegro_message("prb gfx mode");
         allegro_exit();
@@ -27,11 +27,11 @@ void initialisation()
 int main()
 {
     srand(time(NULL));
-	Graphe espace("files/manhattan.txt", "files/manhattan_weights_0.txt");
+	Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
 	vector<pair<float,float>> total;
 	vector<pair<float,float>> pareto;
 	vector<pair<float,float>> nonPareto;
-	 vector<vector<bool>> G = espace.calcul_sousgraphes_admissibles(&total, 0);
+	 vector<vector<bool>> G ;
 	 //bool cycle = false;
 
 
@@ -41,10 +41,12 @@ int main()
 	//espace = espace.dijkstraSPT(3);
     initialisation();
 
+    int couleurFond = makecol(223, 230, 233);
+
     ///BITMAP de fond -------------------------------
     BITMAP *fond;
     fond=create_bitmap(SCREEN_W,SCREEN_H);
-    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, makecol(248, 194, 145));
+    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, couleurFond);
     int posx,posy;    // coordonnées
     int tx,ty;        // taille (largeur et hauteur)
     tx=fond->w;
@@ -55,20 +57,20 @@ int main()
 
     BITMAP *menuD;
     menuD=create_bitmap(SCREEN_W/2,SCREEN_H/2);
-    rectfill(menuD, 0,0, menuD->w, menuD->h, makecol(248, 194, 145));
+    rectfill(menuD, 0,0, menuD->w, menuD->h, couleurFond);
 
     BITMAP *GrapheGeneral;
-    GrapheGeneral=create_bitmap(SCREEN_W/2,SCREEN_H/2);
-    rectfill(GrapheGeneral, 0,0, GrapheGeneral->w, GrapheGeneral->h, makecol(248, 194, 145));
+    GrapheGeneral=create_bitmap(SCREEN_W,SCREEN_H);
+    rectfill(GrapheGeneral, 0,0, GrapheGeneral->w, GrapheGeneral->h, couleurFond);
 
     BITMAP *supportGraphe;
-    supportGraphe=create_bitmap(SCREEN_W/2,SCREEN_H/2);
-    rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, makecol(248, 194, 145));
+    supportGraphe=create_bitmap(SCREEN_W,SCREEN_H);
+    rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h,couleurFond);
 
 
     BITMAP *supportCourbe;
     supportCourbe=create_bitmap(SCREEN_W/2,SCREEN_H/2);
-    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, makecol(248, 194, 145));
+    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
 
 
     ///Dessin------------------------------------------
@@ -78,6 +80,7 @@ int main()
     espace.drawGraphe(GrapheGeneral);
 
     int choice;
+    bool prim = true;
 
     // Boucle d'animation (pas d'interaction)
     while (!key[KEY_ESC])
@@ -91,13 +94,11 @@ int main()
     clear_bitmap(fond);
     show_mouse(screen);
 
-    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, makecol(248, 194, 145));
+    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, couleurFond);
 
-    blit(GrapheGeneral,fond,0,0,0,0,GrapheGeneral->w,GrapheGeneral->h);
-    blit(supportGraphe,fond,0,0,0,SCREEN_H/2,supportGraphe->w,supportGraphe->h);
-    blit(supportCourbe,fond,0,0,SCREEN_W/2 ,100,supportCourbe->w,supportCourbe->h);
-
-
+    blit(GrapheGeneral,fond,50,50,0,0,GrapheGeneral->w,GrapheGeneral->h);
+    blit(supportGraphe,fond,50,70,0,SCREEN_H/2,supportGraphe->w,supportGraphe->h);
+    blit(supportCourbe,fond,50,70,SCREEN_W/2 ,100,supportCourbe->w,supportCourbe->h);
 
 
     choice = espace.menuInterne(fond);
@@ -110,25 +111,41 @@ int main()
     case 2:
     G = espace.calcul_sousgraphes_admissibles(&total, 0);
     choice =0;
-    //pareto = espace.Pareto(total,&nonPareto);
-    //espace.drawNuage(supportCourbe, pareto, nonPareto );
+    pareto = espace.Pareto(total,&nonPareto);
+    espace.drawNuage(supportCourbe, pareto, nonPareto );
         break;
     case 3:
-        (espace.primMST(0,1,0)).drawGraphe(supportGraphe);
+        if(prim)
+        {
+            clear_bitmap(supportGraphe);
+            rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
+            (espace.primMST(0,1,0)).drawGraphe(supportGraphe);
+            choice = 0;
+            prim = false;
+        }
+        else
+            {
+            clear_bitmap(supportGraphe);
+            rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
+            (espace.primMST(0,0,1)).drawGraphe(supportGraphe);
+            choice = 0;
+            prim = true;
+            }
         break;
     case 4:
     clear_bitmap(GrapheGeneral);
     clear_bitmap(supportGraphe);
     clear_bitmap(supportCourbe);
 
-    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, makecol(248, 194, 145));
-    rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, makecol(248, 194, 145));
-    rectfill(GrapheGeneral, 0,0, supportCourbe->w, supportCourbe->h, makecol(248, 194, 145));
+    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
+    rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
+    rectfill(GrapheGeneral, 0,0, GrapheGeneral->w, GrapheGeneral->h, couleurFond);
 
     espace.drawGraphe(GrapheGeneral);
-    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, makecol(248, 194, 145));
-    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, makecol(248, 194, 145));
-    blit(GrapheGeneral,fond,0,0,0,0,GrapheGeneral->w,GrapheGeneral->h);
+    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, couleurFond);
+    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
+
+    blit(GrapheGeneral,fond,50,50,0,0,GrapheGeneral->w,GrapheGeneral->h);
     choice = espace.menuInterne(fond);
     choice = 0;
         break;

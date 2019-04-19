@@ -47,7 +47,7 @@ int main()
     BITMAP *fond;
     fond=create_bitmap(SCREEN_W,SCREEN_H);
     rectfill(fond, 0,0, SCREEN_W, SCREEN_H, couleurFond);
-    int posx,posy;    // coordonnées
+    int posx,posy;    // coordonnï¿½es
     int tx,ty;        // taille (largeur et hauteur)
     tx=fond->w;
     ty=fond->h;
@@ -164,10 +164,10 @@ int main()
 
         // 4) AFFICHAGE DU BUFFER MIS A JOUR A L'ECRAN
         //    le nouveau contenu graphique remplace l'ancien
-        //    sans que l'ancien ait été effacé à l'écran (pas de clignotement)
+        //    sans que l'ancien ait ï¿½tï¿½ effacï¿½ ï¿½ l'ï¿½cran (pas de clignotement)
        // blit(page,screen,0,0,0,0,SCREEN_W,SCREEN_H);
 
-        // 5) ON FAIT UNE PETITE PAUSE à chaque fois sinon ça va trop vite...
+        // 5) ON FAIT UNE PETITE PAUSE ï¿½ chaque fois sinon ï¿½a va trop vite...
         rest(20);
     }
 

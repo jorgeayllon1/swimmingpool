@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "graphe.h"
 #include "graphique.h"
 #include "svgfile.h"

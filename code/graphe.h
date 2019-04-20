@@ -13,37 +13,43 @@
 class Graphe : public Graphique
 {
 public:
+  /****Constructeurs & Destructeurs****/
   Graphe() : m_ordre(0), m_taille(0){};
   Graphe(std::string nom_graphe, std::string nom_poids_graphe);
-  void afficherData() const;
-  int indicesommet(int nomsommet) const;
+  ~Graphe();
+
+  /****Gestion graphe****/
   void addSommet(int lenom, int coordx, int coordy);
   void addSommet(Sommet leclone);
   void addArete(int lenom, int depart, int arriver, float poids1, float poids2, float poids3);
   void removeSommet(int lenom, bool orienter); ///Pas fini
   void removeArete(int depart, int arriver, bool orienter);
-  int getOrdre() const { return m_ordre; };
-  /// tuple utilisable ??
-  /// Peut être list<tuple>
-  Graphe primMST(int nomPremier, int critereprim, int autrecritere);
-  vector<vector<bool>> calcul_sousgraphes_admissibles(vector<pair<float, float>> *total, bool cycle);
-  bool test_connexite();
-  Graphe Conversion(std::vector<bool> Binaire);
-  vector<pair<float, float>> Pareto(std::vector<std::pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto);
-  std::pair<float, float> DonnePoids();
-  int getTaille() { return m_taille; };
-  int getAreteid(int depart, int arriver);
-  //Sommet getSommetid(int nomid);
-  pair<float, Graphe> dijkstraSPT(int nompremier, int critere , bool affichage);
-  int indiceareteid(int nomarete) const;
   bool findSommet(int nomatrouver);
   bool findArete(int nomatrouver);
+  void afficherData() const;
+  int indicesommet(int nomsommet) const;
+  int indiceareteid(int nomarete) const;
+
+  /**** get ****/
+  int getOrdre() const { return m_ordre; };
+  int getTaille() { return m_taille; };
+  int getAreteid(int depart, int arriver);
+  std::pair<float, float> DonnePoids();
+
+  /****Algorithme****/
+  vector<pair<float, float>> Pareto(std::vector<std::pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto);
+  pair<float, Graphe> dijkstraSPT(int nompremier, int critere , bool affichage);
+  Graphe primMST(int nomPremier, int critereprim, int autrecritere);
   int welshpowel();
-  ~Graphe();
+
+  /***Solution admissibles***/
+  bool test_connexite();
+  Graphe Conversion(std::vector<bool> Binaire);
+  vector<vector<bool>> calcul_sousgraphes_admissibles(vector<pair<float, float>> *total, bool cycle);
   bool check();
   int Temps_Parcours();
 
-  //graphisme
+  /***graphisme***/
   void dessinerGraphe();
   void drawGraphe(BITMAP *arbo);
   void drawSousGraphe(BITMAP *arborescence);
@@ -54,5 +60,4 @@ private:
   int m_ordre;
   int m_taille;
 };
-
 #endif

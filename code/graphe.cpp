@@ -484,14 +484,13 @@ pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affich
     {
         lespred[i.first] = i.second.first;
     }
-
+    /*
     for (unsigned int i = 0; i < lespred.size(); i++)
     {
         cout << "f(" << i << ")"
              << " = " << lespred[i] << endl;
     }
 
-    /*
     cerr << "LES PRED\n";
     for (unsigned int i = 0; i < lespred.size(); i++)
     {
@@ -552,71 +551,45 @@ int Graphe::welshpowel()
 
     laliste.sort(sortbydegre);
 
-    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
-    {
-        cout << "id : " << (*it)->getId() << " couleur : " << (*it)->getcouleur() << endl;
-    }
-    cout << endl;
-
-    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
-    {
-        if ((*it)->getcouleur() == 0)
-        {
-            (*it)->setcouleur(pluspetitecouleur);
-            recipsommet = (*it);
-            break;
-        }
-    }
-    /*
-    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
-    {
-        if ((*it)->getcouleur() == 0)
-        {
-            recipsommet = (*it);
-        }
-    }
-*/
-    for (list<Sommet *>::iterator it = find(laliste.begin(), laliste.end(), recipsommet); it != laliste.end(); ++it)
-    {
-        if (*it == recipsommet)
-            continue;
-        cout << (*it)->getId() << " coul : " << (*it)->getcouleur() << endl;
-    }
-
-    //recipsommet->setcouleur(pluspetitecouleur);
-
-    ///boucle qui commence depuis le sommet du dessus
-    /*for (list<Sommet *>::iterator it = find(laliste.begin(), laliste.end(), recipsommet); it != laliste.end(); ++it)
-    {
-
-        if ((*it)->getcouleur() == 0)
-        {
-            (*it)->setcouleur(pluspetitecouleur);
-        }
-    }*/
-
-    /// si i->getcouleur ==0 et non adjacent à recipsommet
-    /// ! i.adjsommetcol(pluspetitecouleur)
-
     bool sommetnoncol = false;
-
-    for (auto &i : laliste)
+    do
     {
-        if (i->getdegre() == 0)
+        sommetnoncol = false;
+        for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
         {
-            sommetnoncol = true;
+            if ((*it)->getcouleur() == 0)
+            {
+                (*it)->setcouleur(pluspetitecouleur);
+                recipsommet = (*it);
+                break;
+            }
         }
-        break;
-    }
 
-    ///while ( sommetnoncol == true)
+        for (list<Sommet *>::iterator it = find(laliste.begin(), laliste.end(), recipsommet); it != laliste.end(); ++it)
+        {
+            if (*it == recipsommet)
+                continue;
+            /// Si il est non colorié
+            if ((*it)->getcouleur() == 0 && !(*it)->adjacentdejacolorier(pluspetitecouleur))
+            {
+                /// Si il est pas adjacent a un truc deja colorier
+                (*it)->setcouleur(pluspetitecouleur);
+            }
+        }
 
-    /// ///////////////////////
-    for (list<Sommet *>::iterator it = laliste.begin(); it != laliste.end(); ++it)
-    {
-        cout << "id : " << (*it)->getId() << " couleur : " << (*it)->getcouleur() << endl;
-    }
-    /// /////////////////////
+        for (auto &i : laliste)
+        {
+            if (i->getcouleur() == 0)
+            {
+                sommetnoncol = true;
+                pluspetitecouleur++;
+                break;
+            }
+        }
+
+    } while (sommetnoncol == true);
+
+    nbdecoul = pluspetitecouleur;
 
     return nbdecoul;
 }

@@ -37,6 +37,9 @@ public:
   //std::unordered_set<int> rechercherCC();
   std::unordered_set<int> parcoursBFS();
 
+  /// Pour le welshpowel
+  bool adjacentdejacolorier(int couleur);
+
 private:
   int m_id;
   int m_couleur; /// Poids temp pour Prim algo

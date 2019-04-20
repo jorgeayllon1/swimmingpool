@@ -28,7 +28,6 @@ void Sommet::afficherData() const
 
 Sommet::~Sommet()
 {
-
 }
 
 ///Attention, cette fonction ne crée pas d'arête entre les deux sommets
@@ -79,9 +78,8 @@ void Sommet::erasevoisin(int lenom)
     for (auto &i : m_voisins)
     {
 
-            recip = i;
-            break;
-
+        recip = i;
+        break;
     }
     if (recip)
     {
@@ -127,10 +125,10 @@ void Sommet::dessiner(Svgfile &svg)
 void Sommet::draw(BITMAP *arbo)
 {
     int color = makecol(223, 230, 233);
-        FONT *myfont;
+    FONT *myfont;
 
-      myfont = load_font("image/fontComic16.pcx", NULL, NULL);
-     if (!myfont)
+    myfont = load_font("image/fontComic16.pcx", NULL, NULL);
+    if (!myfont)
     {
         allegro_message("prb allocation FONT myfont");
         allegro_exit();
@@ -138,9 +136,9 @@ void Sommet::draw(BITMAP *arbo)
     }
     string texte = NumberToString(m_id);
     const char *cstr = texte.c_str();
-    circle(arbo,m_coordx, m_coordy, 15, makecol(10, 61, 98));
-    circlefill(arbo,m_coordx, m_coordy, 13, color);
-    textprintf_centre_ex(arbo,myfont,m_coordx,m_coordy-12,makecol(10, 61, 98),-1,cstr);
+    circle(arbo, m_coordx, m_coordy, 15, makecol(10, 61, 98));
+    circlefill(arbo, m_coordx, m_coordy, 13, color);
+    textprintf_centre_ex(arbo, myfont, m_coordx, m_coordy - 12, makecol(10, 61, 98), -1, cstr);
 }
 
 bool Sommet::findVoisin(int lenom) const
@@ -153,32 +151,50 @@ bool Sommet::findVoisin(int lenom) const
     return false;
 }
 
-std::unordered_set<int> Sommet::parcoursBFS() {
+std::unordered_set<int> Sommet::parcoursBFS()
+{
 
     //std::unordered_map<int,int> l_pred;
     ///création d'un unordered_map pour stocker tout les sommmets , afin d'eviter de les redecouvrir par la suite
-    std::unordered_map<int,Sommet*> sommets_decouverts;
+    std::unordered_map<int, Sommet *> sommets_decouverts;
     std::unordered_set<int> sommets;
-    std::queue <Sommet*> file; ///création de la file de sommets
-    file.push(this);///envoie du sommet de depart en debut de file
+    std::queue<Sommet *> file; ///création de la file de sommets
+    file.push(this);           ///envoie du sommet de depart en debut de file
 
-    while (file.size()!=0)///tant que la file n'est pas vide
-    {       Sommet*S1 = file.front();///definition de sommet S1 comme etant le premier sommet de la file
-           sommets_decouverts[S1->m_id]=file.front();///stockage de S1 dans sommets_decouverts
-           sommets.insert(S1->m_id);
-           ///Boucle for pour stocker les voisins
-           for (unsigned int i = 0 ; i < S1->m_voisins.size();i++)
-           {
-                ///condition pour savoir si un sommet à déja été decouvert
-                if(sommets_decouverts.find(S1->m_voisins[i]->m_id)== sommets_decouverts.end())
-                {
-                    file.push(S1->m_voisins[i]);///stockage du nouveau sommet decouvert dans la file
-                    sommets_decouverts [S1->m_voisins[i]->m_id]= S1->m_voisins[i];///stockage du nouveau sommmet dans sommets_decouverts
-                    //l_pred[S1->m_voisins[i]->m_id]=S1->m_id;///stockage du nouveau sommet et de son predécesseur dans l_pred
-                }
-           }
-           file.pop();///suppression du premier sommet de la file pour passer au suivant
+    while (file.size() != 0) ///tant que la file n'est pas vide
+    {
+        Sommet *S1 = file.front();                   ///definition de sommet S1 comme etant le premier sommet de la file
+        sommets_decouverts[S1->m_id] = file.front(); ///stockage de S1 dans sommets_decouverts
+        sommets.insert(S1->m_id);
+        ///Boucle for pour stocker les voisins
+        for (unsigned int i = 0; i < S1->m_voisins.size(); i++)
+        {
+            ///condition pour savoir si un sommet à déja été decouvert
+            if (sommets_decouverts.find(S1->m_voisins[i]->m_id) == sommets_decouverts.end())
+            {
+                file.push(S1->m_voisins[i]);                                   ///stockage du nouveau sommet decouvert dans la file
+                sommets_decouverts[S1->m_voisins[i]->m_id] = S1->m_voisins[i]; ///stockage du nouveau sommmet dans sommets_decouverts
+                //l_pred[S1->m_voisins[i]->m_id]=S1->m_id;///stockage du nouveau sommet et de son predécesseur dans l_pred
+            }
+        }
+        file.pop(); ///suppression du premier sommet de la file pour passer au suivant
     }
     //std::unordered_set<int> sommets = sommets_decouverts.first;
-    return sommets;///on retourne l'unordered_map l_pred
+    return sommets; ///on retourne l'unordered_map l_pred
+}
+
+/// Welsh powel
+
+bool Sommet::adjacentdejacolorier(int couleur)
+{
+    bool dejavoisinscolorier = false;
+    for (auto &i : m_voisins)
+    {
+        if (i->getcouleur() == couleur)
+        {
+            dejavoisinscolorier = true;
+            break;
+        }
+    }
+    return dejavoisinscolorier;
 }

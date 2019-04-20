@@ -22,7 +22,7 @@ public:
   void addArete(int lenom, int depart, int arriver, float poids1, float poids2, float poids3);
   void removeSommet(int lenom, bool orienter); ///Pas fini
   void removeArete(int depart, int arriver, bool orienter);
-  int getOrdre() const{ return m_ordre; };
+  int getOrdre() const { return m_ordre; };
   /// tuple utilisable ??
   /// Peut être list<tuple>
   Graphe primMST(int nomPremier, int critereprim, int autrecritere);
@@ -41,9 +41,10 @@ public:
   int welshpowel();
   ~Graphe();
   bool check();
+  int Temps_Parcours();
 
-  //graphisme
-  void dessinerGraphe();
+      //graphisme
+      void dessinerGraphe();
   void drawGraphe(BITMAP *arbo);
   void drawSousGraphe(BITMAP *arborescence);
 

@@ -665,7 +665,7 @@ Graphe Graphe::Conversion(std::vector<bool> Binaire)
 
                 if (Binaire[s->getnom()])
                 {
-                    Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids1(),s->getpoids2(),0.0);
+                    Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids(0),s->getpoids(1),0.0);
                 }
             }
     return Tampon;
@@ -759,7 +759,7 @@ void Graphe::drawGraphe(BITMAP *arborescence)
 
 
 }
-=======
+
 vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,float>> *total,bool cycle)
 {
 

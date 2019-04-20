@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "arete.h"
 
 using namespace std;

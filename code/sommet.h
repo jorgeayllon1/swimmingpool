@@ -30,12 +30,12 @@ public:
   void dessiner(Svgfile &svg);
   void draw(BITMAP *);
   int getcoordx() const { return m_coordx; };
-  int getdegre() const {return m_degre;};
   int getcoordy() const { return m_coordy; };
   bool findVoisin(int lenom) const;
+  std::unordered_set<int> rechercherCC();
 
   //std::unordered_set<int> rechercherCC();
-  std::unordered_map<int,int> parcoursBFS();
+  std::unordered_set<int> parcoursBFS();
 
 private:
   int m_id;

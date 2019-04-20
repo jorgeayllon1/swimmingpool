@@ -34,7 +34,7 @@ public:
   int getTaille() { return m_taille; };
   int getAreteid(int depart, int arriver);
   //Sommet getSommetid(int nomid);
-  float dijkstraSPT(int nompremier, int critere);
+  pair<float, Graphe> dijkstraSPT(int nompremier, int critere , bool affichage);
   int indiceareteid(int nomarete) const;
   bool findSommet(int nomatrouver);
   bool findArete(int nomatrouver);

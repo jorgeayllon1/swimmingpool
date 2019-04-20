@@ -20,6 +20,7 @@ void pred(int sommetinit, int a, vector<int> lespred, Graphe &ledjiskra, Graphe 
         /// On appelle la fonction recursivement pour appeller le precedent du precedent
     }
 }
+
 /// Enlever et mettre dans algorithme.cpp
 void Graphe::addSommet(int lenom, int coordx, int coordy)
 {
@@ -382,7 +383,7 @@ void Graphe::removeArete(int depart, int arriver, bool orienter)
     m_taille--;
 }
 
-float Graphe::dijkstraSPT(int nomPremier, int critere)
+pair<float,Graphe> Graphe::dijkstraSPT(int nomPremier, int critere ,bool affichage)
 {
     assert(findSommet(nomPremier));
 
@@ -462,13 +463,15 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
         ledijkstra.addArete(nomdelarete, nomdumoment, distancechemins.find(nomdumoment)->second.first, m_aretes[indiceareteid(nomdelarete)]->getpoids(0), m_aretes[indiceareteid(nomdelarete)]->getpoids(1), m_aretes[indiceareteid(nomdelarete)]->getpoids(2));
     } while (ledijkstra.getOrdre() != m_ordre);
 
-    /*
-    cout << "Som : Pred | Dist\n";
-    for (auto &i : distancechemins)
+    if (affichage)
     {
-        cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+        cout << "Som : Pred | Dist\n";
+        for (auto &i : distancechemins)
+        {
+            cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+        }
     }
-*/
+
     /// On met à jours les arêtes
 
     vector<int> lespred;
@@ -523,7 +526,8 @@ float Graphe::dijkstraSPT(int nomPremier, int critere)
     {
         lecoutot +=  i.second.second;
     }
-    return lecoutot;
+    std::pair<float,Graphe> dijkstra = std::make_pair(lecoutot,ledijkstra);
+    return dijkstra;
 }
 
 bool sortbydegre(const Sommet *a, const Sommet *b)
@@ -764,7 +768,6 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
 {
 
     unsigned int nb_cas = pow(2,m_taille);
-    //std::cout<<nb_cas;
     vector<vector<bool>> mes_sous_graphes;
     //clock_t start_t, end_t;
 
@@ -782,20 +785,9 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
                 numeration_binaire.push_back(true);
             nb_arretes=numeration_binaire.back()+nb_arretes;
             number = number/2;
-
         }
-
         if ((nb_arretes==(m_sommets.size()-1)&&!(cycle)) ||  (nb_arretes>=(m_sommets.size()-1)&&(cycle)))// && test_connexite_preventif())
-        //if ((nb_arretes==(m_sommets.size()-1)))
         {
-            // if ( std::bitset<32>(i).count() == (m_sommets.size()-1))
-            // {
-            //cout << std::bitset<32>(i) <<endl;
-
-            //numeration_binaire.push_back(std::bitset<32>(i));
-
-            //numeration_binaire=std::bitset<32>(i);
-            //start_t = clock();
             Graphe Tampon;
             for (int k = 0 ; k < m_ordre ; k++)
             {
@@ -807,8 +799,8 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float,fl
                 if (numeration_binaire[s->getnom()])
                 {
                     tab[0] += s->getpoids(0);
-                    //if(!cycle)
-                    tab[1] += s->getpoids(1);
+                    if(!cycle)
+                        tab[1] += s->getpoids(1);
                     Tampon.addArete(s->getnom(),s->getdepart().getId(),s->getarriver().getId(),s->getpoids(0),s->getpoids(1),0.0);
                 }
             }
@@ -865,7 +857,7 @@ int Graphe::Temps_Parcours()
     int s = 0;
     for (int k = 0 ; k < m_ordre ; k++)
         {
-            s += dijkstraSPT(k,1);
+            s += dijkstraSPT(k,1,false).first;
         }
     return s;
 }

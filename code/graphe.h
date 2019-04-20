@@ -43,8 +43,8 @@ public:
   bool check();
   int Temps_Parcours();
 
-      //graphisme
-      void dessinerGraphe();
+  //graphisme
+  void dessinerGraphe();
   void drawGraphe(BITMAP *arbo);
   void drawSousGraphe(BITMAP *arborescence);
 

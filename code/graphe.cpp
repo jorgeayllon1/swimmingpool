@@ -324,7 +324,7 @@ void Graphe::removeSommet(int lenom, bool orienter)
             }
         }
         if (recip != NULL)
-            removeArete(recip->getdepart().getId(), recip->getarriver().getId(), orienter);
+            removeArete(recip->getdepart().getId(),recip->getarriver().getId(), orienter);
     }
 
     m_sommets.erase(m_sommets.begin() + lenom);
@@ -526,8 +526,7 @@ pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affich
     {
         lecoutot += i.second.second;
     }
-    std::pair<float, Graphe> dijkstra = std::make_pair(lecoutot, ledijkstra);
-    return dijkstra;
+    return make_pair(lecoutot,ledijkstra);
 }
 
 bool sortbydegre(const Sommet *a, const Sommet *b)
@@ -596,19 +595,34 @@ int Graphe::welshpowel()
 
 Graphe::~Graphe()
 {
+    
     // on appel delete sur chaque element
-    std::for_each(m_sommets.begin(), m_sommets.end(), DeleteFunctor<Sommet>());
+    //std::for_each(m_sommets.begin(), m_sommets.end(), DeleteFunctor<Sommet>());
 
     // swap trick pour vider le vector et liberer la memoire
-    std::vector<Sommet *>().swap(m_sommets);
+    //std::vector<Sommet *>().swap(m_sommets);
 
-    std::for_each(m_aretes.begin(), m_aretes.end(), DeleteFunctor<Arete>());
+    //std::for_each(m_aretes.begin(), m_aretes.end(), DeleteFunctor<Arete>());
 
     // swap trick pour vider le vector et liberer la memoire
-    std::vector<Arete *>().swap(m_aretes);
+    //std::vector<Arete *>().swap(m_aretes);
 
-    //    for(unsigned int i=0; i<m_aretes.size();i++)
-    //        delete(m_aretes[i]);
+    for(auto &i : m_aretes)
+    {
+        if(i)
+        delete i;
+    }
+    m_aretes.clear();
+
+    for(auto &i : m_sommets)
+    {
+        if(i)
+        delete i;
+        //afficherData();
+    }
+    m_sommets.clear();
+    m_ordre = 0;
+    m_taille = 0;
 }
 
 ///CONNEXE

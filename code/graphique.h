@@ -22,7 +22,7 @@ class Graphique
 {
 public:
     Graphique();
-    ~Graphique();
+    virtual ~Graphique();
     void dessiner(Svgfile &svg);
     void drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<pair<float,float>> &nonPareto);
     int menuInterne(BITMAP *page);

@@ -8,9 +8,9 @@ using namespace std;
 
 int main()
 {
-    Graphe espace("files/manhattan.txt","files/manhattan_weights_0.txt");
-    int nbdecoul = espace.welshpowel();
-    cout<<nbdecoul<<endl;
-    //Graphe autre = espace.dijkstraSPT(3,0,false).second;
+    Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
+
+    ///Graphe autre = espace.dijkstraSPT(0, 0, false).second;
+
     return 0;
 }

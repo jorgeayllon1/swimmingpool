@@ -28,6 +28,13 @@ void Sommet::afficherData() const
 
 Sommet::~Sommet()
 {
+    /*
+    for (auto &i : m_voisins)
+    {
+        if (i)
+            erasevoisin(i->getId());
+    }*/
+    m_voisins.clear();
 }
 
 ///Attention, cette fonction ne crée pas d'arête entre les deux sommets
@@ -69,6 +76,7 @@ Sommet::Sommet(Sommet const &copie) : m_id(copie.m_id), m_couleur(copie.m_couleu
 void Sommet::erasevoisin(int lenom)
 {
     /// Variable temp
+    /*
     Sommet *recip = NULL;
 
     /// On cherche le voisin a enlever
@@ -85,6 +93,11 @@ void Sommet::erasevoisin(int lenom)
     {
         m_voisins.erase(m_voisins.begin() + recip->m_id);
         m_degre--;
+    }
+    */
+    for (auto &i : m_voisins)
+    {
+        i = NULL;
     }
 }
 /*

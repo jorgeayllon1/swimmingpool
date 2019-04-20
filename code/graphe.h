@@ -16,7 +16,7 @@ public:
   /****Constructeurs & Destructeurs****/
   Graphe() : m_ordre(0), m_taille(0){};
   Graphe(std::string nom_graphe, std::string nom_poids_graphe);
-  ~Graphe();
+  virtual ~Graphe();
 
   /****Gestion graphe****/
   void addSommet(int lenom, int coordx, int coordy);

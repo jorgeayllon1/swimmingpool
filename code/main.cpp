@@ -6,11 +6,10 @@
 #include <bitset>
 using namespace std;
 
+
+
 int main()
 {
-    Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
-
-    ///Graphe autre = espace.dijkstraSPT(0, 0, false).second;
-
-    return 0;
+    troisDeuxUnPartez();
 }
+END_OF_MAIN();

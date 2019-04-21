@@ -29,7 +29,7 @@ int Graphique::menuInterne(BITMAP *page)
     int finX = startX + 100;
     int startY = SCREEN_H/2 + 100;
     int finY = startY + 50;
-    int CHOIX =4;
+    int CHOIX =10;
     int couleurBouton = makecol(119, 140, 163);
 
 
@@ -45,6 +45,9 @@ int Graphique::menuInterne(BITMAP *page)
     rectfill(page, startX,startY+150, finX, startY + 200, couleurBouton);
     rect(page, startX,startY+150, finX, startY + 200, makecol(0,0,0));
 
+    rectfill(page, startX,startY+200, finX, startY + 250, couleurBouton);
+    rect(page, startX,startY+200, finX, startY + 250, makecol(0,0,0));
+
 
     for(int i=1;i<=CHOIX;i++)
     {
@@ -52,6 +55,7 @@ int Graphique::menuInterne(BITMAP *page)
     if(mouse_x  > startX && mouse_x  < finX && mouse_y < (startY + 50*i) && mouse_y > startY&& mouse_b & 1) // gauche : dessiner en rouge)
         return i;
     }
+    return 0;
 
 
 }
@@ -60,17 +64,26 @@ int Graphique::menuInterne(BITMAP *page)
 void Graphique::drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<pair<float,float>> &nonPareto)
 {
 
-    int longGraph = 300;
-    int originX = 50;
-    int origineY = SCREEN_H/2 - 100;
-    //rectfill(arbo, 0,0, arbo->w, arbo->h, makecol(248, 194, 145));
-    int coef = 10;
+    int longGraph = 200;
+    int originX = 11;
+    int origineY = SCREEN_H/2 -20;
+//    int origineY = SCREEN_H-100;
+//    int originX = 0;
+//    int longGraph = 400;
+    sort(nonPareto.begin(), nonPareto.end(), sortbyCout2);
+    double Xmax = nonPareto.back().second;
+    sort(nonPareto.begin(), nonPareto.end(), sortbyCout1);
+    double Ymax = nonPareto.back().first;
+
+    rect(arbo, 0,0, arbo->w-10, arbo->h-10, makecol(0,0,0));
+    double coef = 1/(100/sqrt(pow(Xmax-originX,2)+pow((origineY)+Ymax,2)));
+    cout << "le coef est :" <<coef<<endl;
     //void floodfill(BITMAP *bmp, int x, int y, int color);
 
     line(arbo,originX,origineY,originX ,  origineY-longGraph, makecol(0,0,0)); /// ligne vertical
     line(arbo,originX , origineY,originX+longGraph , origineY, makecol(0,0,0)); /// ligne Horizontal
 
-    textprintf_centre_ex(arbo,font,  originX  ,  origineY-longGraph ,   makecol(10, 61, 98),-1,"cout 1");
+    textprintf_centre_ex(arbo,font,  originX +27 ,  origineY-longGraph ,   makecol(10, 61, 98),-1,"cout 1");
     textprintf_centre_ex(arbo,font,  originX+longGraph , origineY +5 ,   makecol(10, 61, 98),-1,"cout 2");
 
 
@@ -81,10 +94,29 @@ for(auto &p : pareto)
 
 
 
+
 //    if(mouse_x  == p.first*coef && mouse_y == origineY-p.second*coef && mouse_b & 1) // gauche : dessiner en rouge)
 //        return i;
 
 
+}
+
+
+void Graphique::refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BITMAP * supportGraphe, BITMAP *GrapheGeneral)
+{
+    clear_bitmap(GrapheGeneral);
+    clear_bitmap(supportGraphe);
+    clear_bitmap(supportCourbe);
+
+    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
+    rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
+    rectfill(GrapheGeneral, 0,0, GrapheGeneral->w, GrapheGeneral->h, couleurFond);
+
+    drawGraphe(GrapheGeneral);
+    rectfill(fond, 0,0, SCREEN_W, SCREEN_H, couleurFond);
+    rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
+
+    blit(GrapheGeneral,fond,50,50,0,0,GrapheGeneral->w,GrapheGeneral->h);
 }
 
 //int Graphique::fairePrim()

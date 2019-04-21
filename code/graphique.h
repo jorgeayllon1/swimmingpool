@@ -25,7 +25,9 @@ public:
     virtual ~Graphique();
     void dessiner(Svgfile &svg);
     void drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<pair<float,float>> &nonPareto);
-    int menuInterne(BITMAP *page);
+    virtual int menuInterne(BITMAP *page);
+    virtual void refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BITMAP * supportGraphe, BITMAP *GrapheGeneral);
+    virtual void drawGraphe(BITMAP *){}
 
 protected:
     std::string m_color_sommet;

@@ -32,9 +32,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="algorithm..h" />
 		<Unit filename="algorithm.cpp" />
 		<Unit filename="arete.cpp" />
 		<Unit filename="arete.h" />
+		<Unit filename="fonctionsutiles.cpp" />
+		<Unit filename="fonctionsutiles.h" />
 		<Unit filename="graphe.cpp" />
 		<Unit filename="graphe.h" />
 		<Unit filename="graphique.cpp" />

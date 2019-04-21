@@ -4,6 +4,18 @@
 
 using namespace std;
 
+bool sortbyCout1(const pair<int, int> &a,
+               const pair<int, int> &b)
+{
+    return (a.first < b.first);
+}
+
+bool sortbyCout2(const pair<int, int> &a,
+               const pair<int, int> &b)
+{
+    return (a.second < b.second);
+}
+
 vector<bool> decimaltobinary(int n, int taille)
 {
 

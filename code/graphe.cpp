@@ -595,7 +595,7 @@ int Graphe::welshpowel()
 
 Graphe::~Graphe()
 {
-    
+
     // on appel delete sur chaque element
     //std::for_each(m_sommets.begin(), m_sommets.end(), DeleteFunctor<Sommet>());
 
@@ -669,11 +669,7 @@ pair<float, float> Graphe::DonnePoids()
     return total;
 }
 
-bool sortbysec(const pair<int, int> &a,
-               const pair<int, int> &b)
-{
-    return (a.first < b.first);
-}
+
 
 vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto)
 {
@@ -685,7 +681,7 @@ vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std
 
     pareto.push_back(make_pair(0, 0));
     bool test = true;
-    sort(total.begin(), total.end(), sortbysec);
+    sort(total.begin(), total.end(), sortbyCout1);
 
     float maxCout2 = 99999999;
 
@@ -703,6 +699,8 @@ vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std
         else
             nonPareto->push_back(make_pair(l.first, l.second));
     }
+
+    total.clear();
 
     for (auto &l : pareto)
         cout << "pareto :" << l.first << "et" << l.second << endl;
@@ -751,15 +749,14 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float, f
         unsigned int nb_arretes = 0;
         int number = i;
 
-        for (int j = 0; j < m_taille; j++)
+        std::bitset<32> b2 {i};
+        for(int m = 0 ; m<m_taille;m++)
         {
-            if (number % 2 == 0)
-                numeration_binaire.push_back(false);
-            else
-                numeration_binaire.push_back(true);
-            nb_arretes = numeration_binaire.back() + nb_arretes;
-            number = number / 2;
+            numeration_binaire.push_back(b2[b2.size()+m]) ;
         }
+        if (i % 1000000 == 0)
+                        cout << i << endl;
+        nb_arretes = b2.count();
         if ((nb_arretes == (m_sommets.size() - 1) && !(cycle)) || (nb_arretes >= (m_sommets.size() - 1) && (cycle))) // && test_connexite_preventif())
         {
             Graphe Tampon;
@@ -790,8 +787,7 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float, f
                     mes_sous_graphes.push_back(numeration_binaire);
                     total->push_back(make_pair(tab[0], tab[1]));
                     //Tampon.dessinerGraphe();
-                    if (i % 10000 == 0)
-                        cout << i << endl;
+
                 }
             }
             (numeration_binaire).erase(numeration_binaire.begin(), numeration_binaire.end());

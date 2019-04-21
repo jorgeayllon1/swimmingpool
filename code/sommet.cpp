@@ -150,7 +150,7 @@ void Sommet::draw(BITMAP *arbo)
     string texte = NumberToString(m_id);
     const char *cstr = texte.c_str();
     circle(arbo, m_coordx, m_coordy, 15, makecol(10, 61, 98));
-    circlefill(arbo, m_coordx, m_coordy, 13, color);
+    circlefill(arbo, m_coordx, m_coordy, 13, makecol(0,0,m_couleur*10));
     textprintf_centre_ex(arbo, myfont, m_coordx, m_coordy - 12, makecol(10, 61, 98), -1, cstr);
 }
 

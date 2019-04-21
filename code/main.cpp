@@ -8,9 +8,26 @@ using namespace std;
 
 int main()
 {
-    Graphe espace("files/broadway.txt", "files/broadway_weights_0.txt");
+    Graphe espace("files/manhattan.txt", "files/manhattan_weights_0.txt");
 
-    ///Graphe autre = espace.dijkstraSPT(0, 0, false).second;
+    
+    vector<pair<float, float>> total;
+    vector<vector<bool>> hein = espace.calcul_sousgraphes_admissibles(&total, true);
+
+    for (unsigned int i = 0; i < hein.size(); i++)
+    {
+        for (unsigned int j = 0; j < hein[i].size(); j++)
+        {
+            cout << hein[i][j] << " ";
+        }
+        cout << endl;
+    }
+    /*
+    cout<<"avec le graphe\n";
+    Graphe autre = espace.dijkstraSPT(3, 0);
+    cout<<"sans le graphe\n";
+    cout << espace.dijkstraSPT(3, 0, false) << endl;
+    */
 
     return 0;
 }

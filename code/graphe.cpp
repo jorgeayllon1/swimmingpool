@@ -324,7 +324,7 @@ void Graphe::removeSommet(int lenom, bool orienter)
             }
         }
         if (recip != NULL)
-            removeArete(recip->getdepart().getId(),recip->getarriver().getId(), orienter);
+            removeArete(recip->getdepart().getId(), recip->getarriver().getId(), orienter);
     }
 
     m_sommets.erase(m_sommets.begin() + lenom);
@@ -384,13 +384,15 @@ void Graphe::removeArete(int depart, int arriver, bool orienter)
     m_taille--;
 }
 
-pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affichage)
+Graphe Graphe::dijkstraSPT(int nomPremier, int critere)
 {
     assert(findSommet(nomPremier));
 
     Graphe ledijkstra;
     //ledijkstra.addSommet(nomPremier,getSommetid(nomPremier).getcoordx(),getSommetid(nomPremier).getcoordy());
     ledijkstra.addSommet(nomPremier, m_sommets[indicesommet(nomPremier)]->getcoordx(), m_sommets[indicesommet(nomPremier)]->getcoordy());
+    unordered_set<int> valide;
+    valide.insert(nomPremier);
 
     /// IMPORTANT :
     /// On considère qu'un sommet est marquée (qu'on a trouvé son plus court chemin) si il est dans le graphe ledijkstra
@@ -464,15 +466,116 @@ pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affich
         ledijkstra.addArete(nomdelarete, nomdumoment, distancechemins.find(nomdumoment)->second.first, m_aretes[indiceareteid(nomdelarete)]->getpoids(0), m_aretes[indiceareteid(nomdelarete)]->getpoids(1), m_aretes[indiceareteid(nomdelarete)]->getpoids(2));
     } while (ledijkstra.getOrdre() != m_ordre);
 
-    if (affichage)
+    /// On met à jours les arêtes
+    /*
+    cout << "Som : Pred | Dist\n";
+    for (auto &i : distancechemins)
     {
-        cout << "Som : Pred | Dist\n";
+        cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+    }*/
+
+    vector<int> lespred;
+    for (unsigned int i = 0; i < distancechemins.size(); i++)
+    {
+        lespred.push_back(0);
+    }
+    for (auto &i : distancechemins)
+    {
+        lespred[i.first] = i.second.first;
+    }
+    return ledijkstra;
+}
+
+float Graphe::dijkstraSPT(int nomPremier, int critere, bool affichage)
+{
+    assert(findSommet(nomPremier));
+
+    //Graphe ledijkstra;
+    //ledijkstra.addSommet(nomPremier,getSommetid(nomPremier).getcoordx(),getSommetid(nomPremier).getcoordy());
+    //ledijkstra.addSommet(nomPremier, m_sommets[indicesommet(nomPremier)]->getcoordx(), m_sommets[indicesommet(nomPremier)]->getcoordy());
+    unordered_set<int> valide;
+    valide.insert(nomPremier);
+
+    /// IMPORTANT :
+    /// On considère qu'un sommet est marquée (qu'on a trouvé son plus court chemin) si il est dans le graphe ledijkstra
+
+    map<int, pair<int, float>> distancechemins;
+    /// Distance entre le depart et le sommet
+
+    for (auto &i : m_sommets)
+    {
+        distancechemins.insert(make_pair(i->getId(), make_pair(0, 99999)));
+    }
+    /// On ajoute tout les chemins au ensemble d'information
+
+    distancechemins.find(nomPremier)->second.second = 0;
+    distancechemins.find(nomPremier)->second.first = nomPremier;
+    /// Le sommet de depart a une distance nulle à lui-même
+
+    int nomdumoment = nomPremier;
+    /// Nom du sommet selectionner
+
+    do
+    {
+        int poidrecip = 9999;
+
+        for (auto &i : m_aretes)
+        {
+
+            if (i->getdepart().getId() == nomdumoment && valide.find(i->getarriver().getId()) == valide.end())
+            {
+                /// Si l'arete par de notre sommet
+                /// Et i l'arete ne va pas dans un sommet deja validé par l'algorithme
+                /// On ne va pas rechecker la distance pour un sommet qui a déjà un plus court chemin
+                if (i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getarriver().getId())->second.second)
+                {
+                    /// Les sommets gardent toujours leur distance à l'origine
+                    /// Si la distance à l'orgine + celle de la nouvelle arete est plus petite que la valeur precedente dans les données
+                    /// Je vois pas trop comment traduire cette ligne, faut vraiment comprendre dijkstra
+                    distancechemins.find(i->getarriver().getId())->second.first = nomdumoment;
+                    distancechemins.find(i->getarriver().getId())->second.second = i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second;
+                    /// On met à jours la distance au sommet de l'indice parcouru
+                }
+            }
+
+            else if (i->getarriver().getId() == nomdumoment && valide.find(i->getdepart().getId()) == valide.end())
+            {
+                if (i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second < distancechemins.find(i->getdepart().getId())->second.second)
+                {
+                    distancechemins.find(i->getdepart().getId())->second.first = nomdumoment;
+                    distancechemins.find(i->getdepart().getId())->second.second = i->getpoids(critere) + distancechemins.find(nomdumoment)->second.second;
+                }
+            }
+        }
+
+        poidrecip = 99999;
+        /// On cherche la distance minimale non déjà validée
+
         for (auto &i : distancechemins)
         {
-            cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+            if (i.second.second < poidrecip && valide.find(i.first) == valide.end())
+            {
+                /// Si la distance est minimale est non marquée
+                nomdumoment = i.first;
+                poidrecip = i.second.second;
+            }
         }
-    }
 
+        ///nomdumoment devient le sommet de refference et on le marque
+        //ledijkstra.afficherData();
+        //ledijkstra.addSommet(nomdumoment, m_sommets[indicesommet(nomdumoment)]->getcoordx(), m_sommets[indicesommet(nomdumoment)]->getcoordy());
+        //int nomdelarete = getAreteid(nomdumoment, distancechemins.find(nomdumoment)->second.first);
+        //ledijkstra.addArete(nomdelarete, nomdumoment, distancechemins.find(nomdumoment)->second.first, m_aretes[indiceareteid(nomdelarete)]->getpoids(0), m_aretes[indiceareteid(nomdelarete)]->getpoids(1), m_aretes[indiceareteid(nomdelarete)]->getpoids(2));
+        valide.insert(nomdumoment);
+
+    } while (valide.size() != m_ordre);
+/*
+    cout << "Som : Pred | Dist\n";
+    for (auto &i : distancechemins)
+    {
+        cout << i.first << " : " << i.second.first << " | " << i.second.second << endl;
+    }
+*/
     /// On met à jours les arêtes
 
     vector<int> lespred;
@@ -484,41 +587,6 @@ pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affich
     {
         lespred[i.first] = i.second.first;
     }
-    /*
-    for (unsigned int i = 0; i < lespred.size(); i++)
-    {
-        cout << "f(" << i << ")"
-             << " = " << lespred[i] << endl;
-    }
-
-    cerr << "LES PRED\n";
-    for (unsigned int i = 0; i < lespred.size(); i++)
-    {
-        cout << i << " " << lespred[i] << endl;
-    }*/
-    /*
-    cout << "Les chemins : \n";
-    for (auto &i : distancechemins)
-    {
-        cout << i.first << " ";
-        //pred(nomPremier, i.first, lespred,ledijkstra,this);
-        cout << "en " << i.second.second << endl;
-    }
-*/
-    ///Code à faire :
-    ///Mettre à jours les arêtes du graphe grâce au plus court chemin
-    /*
-    for(unsigned int i=0;i< m_aretes.size();i++)
-    {
-        for(unsigned int j=0;j<m_aretes.size();j++)
-        {
-            if()
-        }
-    }
-*/
-    //return ledijkstra;
-    //ledijkstra.afficherData();
-    //ledijkstra.dessinerGraphe();
 
     float lecoutot = 0;
 
@@ -526,7 +594,7 @@ pair<float, Graphe> Graphe::dijkstraSPT(int nomPremier, int critere, bool affich
     {
         lecoutot += i.second.second;
     }
-    return make_pair(lecoutot,ledijkstra);
+    return lecoutot;
 }
 
 bool sortbydegre(const Sommet *a, const Sommet *b)
@@ -595,7 +663,7 @@ int Graphe::welshpowel()
 
 Graphe::~Graphe()
 {
-    
+
     // on appel delete sur chaque element
     //std::for_each(m_sommets.begin(), m_sommets.end(), DeleteFunctor<Sommet>());
 
@@ -607,17 +675,16 @@ Graphe::~Graphe()
     // swap trick pour vider le vector et liberer la memoire
     //std::vector<Arete *>().swap(m_aretes);
 
-    for(auto &i : m_aretes)
+    for (auto &i : m_aretes)
     {
-        if(i)
         delete i;
     }
     m_aretes.clear();
 
-    for(auto &i : m_sommets)
+    for (auto &i : m_sommets)
     {
-        if(i)
-        delete i;
+        if (i)
+            delete i;
         //afficherData();
     }
     m_sommets.clear();
@@ -744,9 +811,12 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float, f
     unsigned int nb_cas = pow(2, m_taille);
     vector<vector<bool>> mes_sous_graphes;
     //clock_t start_t, end_t;
+    int debut = pow(2, m_ordre+1)-1;
 
     for (unsigned int i = 0; i < nb_cas; i++)
     {
+        if (i % 1000000)
+            cout << i << endl;
         vector<bool> numeration_binaire;
         unsigned int nb_arretes = 0;
         int number = i;
@@ -799,11 +869,14 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float, f
     }
     return mes_sous_graphes;
 }
+
 bool Graphe::test_connexite()
 {
-    int i = 0;
+    //int i = 0;
     std::unordered_set<int> cc;
-    std::unordered_set<int> sommmet_decouvert;          ///creation d'une liste de tout les sommet déjà decouvert
+    /*
+    std::unordered_set<int> sommmet_decouvert;
+           ///creation d'une liste de tout les sommet déjà decouvert
     for (unsigned int j = 0; j < m_sommets.size(); j++) ///lecture de sommet en sommet
     {
         ///condition de verification de la decouverte ou non d'un sommet
@@ -817,12 +890,19 @@ bool Graphe::test_connexite()
                 sommmet_decouvert.insert(k); ///insertion des sommets connectés dans sommet_decouvert
             }
         }
-    }
+    }*/
+    cc = m_sommets[0]->parcoursBFS();
+    if (cc.size() == m_ordre)
+        return true;
+    else
+        return false;
+    /*
     if (i != 1)
     {
         return false;
     }
     return true;
+    */
 }
 
 int Graphe::Temps_Parcours()
@@ -830,7 +910,7 @@ int Graphe::Temps_Parcours()
     int s = 0;
     for (int k = 0; k < m_ordre; k++)
     {
-        s += dijkstraSPT(k, 1, false).first;
+        s += dijkstraSPT(k, 1, false);
     }
     return s;
 }

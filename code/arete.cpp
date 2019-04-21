@@ -33,8 +33,10 @@ Arete::Arete(Arete const &copie) : m_nom(copie.m_nom), m_depart(copie.m_depart),
 
 Arete::~Arete()
 {
-    m_depart = NULL;
-    m_arriver = NULL;
+    if (m_depart)
+        m_depart = NULL;
+    if (m_arriver)
+        m_arriver = NULL;
 }
 
 void Arete::dessiner(Svgfile &svg)

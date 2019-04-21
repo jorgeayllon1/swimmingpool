@@ -31,7 +31,7 @@ int Graphique::menuInterne(BITMAP *page)
     int startX = 700;
     int finX = startX + 100;
     int startY = SCREEN_H/2 + 100;
-    int finY = startY + 50;
+    //int finY = startY + 50;
     int CHOIX =6;
     int couleurBouton = makecol(119, 140, 163);
 

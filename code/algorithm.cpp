@@ -182,7 +182,8 @@ void troisDeuxUnPartez()
                 clear_bitmap(supportGraphe);
                 rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
             numero++;
-        if(pareto.size()==numero)
+            int rien = pareto.size();
+        if(rien==numero)
             numero=0;
         std::string poids = NumberToString(pareto[numero].first) + " ; " +NumberToString(pareto[numero].second) ;
         const char *cstr = poids.c_str();

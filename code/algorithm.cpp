@@ -110,9 +110,12 @@ void troisDeuxUnPartez()
     case 1:
      if(prim)
         {
+            Graphe *krukal;
             clear_bitmap(supportGraphe);
             rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
-            (espace->primMST(0,1,0)).drawGraphe(supportGraphe);
+            krukal = new Graphe(espace->primMST(0,1,0));
+            krukal->welshpowel();
+            krukal->drawGraphe(supportGraphe);
             choice = 0;
             prim = false;
         }
@@ -140,7 +143,7 @@ void troisDeuxUnPartez()
     case 3:
     G = espace->calcul_sousgraphes_admissibles(&total, 1);
     choice =0;
-    //pareto = espace->Pareto(total,&nonPareto);
+    pareto = espace->Pareto(total,&nonPareto, G);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
     //espace->drawSousGraphe(pareto);
 
@@ -169,6 +172,7 @@ void troisDeuxUnPartez()
 
         delete(espace);
         espace = new Graphe (fichiers1, fichiers2);
+         espace->welshpowel();
          espace->refresh(couleurFond, fond, supportCourbe, supportGraphe, GrapheGeneral);
          break;
 
@@ -178,9 +182,34 @@ void troisDeuxUnPartez()
                 clear_bitmap(supportGraphe);
                 rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
             numero++;
-            cout << numero;
         if(pareto.size()==numero)
             numero=0;
+        std::string poids = NumberToString(pareto[numero].first) + " ; " +NumberToString(pareto[numero].second) ;
+        const char *cstr = poids.c_str();
+        Graphe *graphitis;
+
+        graphitis = new Graphe(espace->Conversion(G[numero]));
+            graphitis->welshpowel();
+            graphitis->drawGraphe(supportGraphe);
+
+
+        textout_centre_ex(supportGraphe,font,cstr , 230,  400, makecol(75, 101, 132), -1);
+        //rect(supportGraphe, 225,390, 320, 410, makecol(0,0,0));
+        rest(100);
+
+
+            }
+
+            break;
+
+                case 7 :
+        if(fleche)
+            {
+                clear_bitmap(supportGraphe);
+                rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
+            numero--;
+        if(-1==numero)
+            numero=pareto.size();
 
         espace->Conversion(G[numero]).drawGraphe(supportGraphe);
         rest(100);

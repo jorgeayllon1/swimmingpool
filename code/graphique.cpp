@@ -87,6 +87,8 @@ int Graphique::menuInterne(BITMAP *page)
 
     if(mouse_x  > startX +100 && mouse_x  < finX+30 && mouse_y > (startY + 75) && mouse_y < startY +125&& mouse_b & 1) // gauche : dessiner en rouge)
         return 6;
+    if(mouse_x  > startX -30 && mouse_x  < startX && mouse_y > (startY + 75) && mouse_y < startY +125&& mouse_b & 1) // gauche : dessiner en rouge)
+        return 6;
 
 
     return 0;
@@ -111,7 +113,7 @@ void Graphique::drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<
 
     rect(arbo, 0,0, arbo->w-10, arbo->h-10, makecol(0,0,0));
     //double coef = 1/(100/sqrt(pow(Xmax-originX,2)+pow((origineY)+Ymax,2)));
-    double coef = (2000/sqrt(pow(Xmax-(originX+longGraph),2)+pow((origineY)+Ymax,2)));
+    double coef = (1750/sqrt(pow(Xmax-(originX+longGraph),2)+pow((origineY)+Ymax,2)));
     cout << "le coef est :" <<coef<<endl;
     //void floodfill(BITMAP *bmp, int x, int y, int color);
 

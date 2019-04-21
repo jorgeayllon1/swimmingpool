@@ -137,8 +137,36 @@ void Sommet::dessiner(Svgfile &svg)
 
 void Sommet::draw(BITMAP *arbo)
 {
-    int color = makecol(223, 230, 233);
     FONT *myfont;
+
+        int lacoul = 0;
+    switch (m_couleur)
+    {
+    case 1:
+        lacoul = makecol(241, 144, 102);
+        break;
+    case 2:
+        lacoul = makecol(245, 205, 121);
+        break;
+    case 3:
+        lacoul = makecol(84, 109, 229);
+        break;
+    case 4:
+        lacoul = makecol(196, 69, 105);
+        break;
+    case 5:
+        lacoul = makecol(248, 165, 194);
+        break;
+    case 6:
+        lacoul = makecol(120, 111, 166);
+        break;
+    case 7:
+        lacoul = makecol(247, 241, 227);
+        break;
+    default:
+        lacoul = makecol(200, m_couleur*40, m_couleur*40);
+        break;
+    }
 
     myfont = load_font("image/fontComic16.pcx", NULL, NULL);
     if (!myfont)
@@ -149,8 +177,8 @@ void Sommet::draw(BITMAP *arbo)
     }
     string texte = NumberToString(m_id);
     const char *cstr = texte.c_str();
-    circle(arbo, m_coordx, m_coordy, 15, makecol(10, 61, 98));
-    circlefill(arbo, m_coordx, m_coordy, 13, makecol(0,0,m_couleur*10));
+    //circle(arbo, m_coordx, m_coordy, 15, makecol(10, 61, 98));
+    circlefill(arbo, m_coordx, m_coordy, 13, lacoul);
     textprintf_centre_ex(arbo, myfont, m_coordx, m_coordy - 12, makecol(10, 61, 98), -1, cstr);
 }
 

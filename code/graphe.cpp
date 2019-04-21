@@ -738,13 +738,16 @@ pair<float, float> Graphe::DonnePoids()
 
 
 
-vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto)
+vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto,std::vector<vector<bool>> *G)
 {
 
     //pair<float,float> limite = primMST(0,0,1);
     //cout << "litme :" << limite.first << "et" << limite.second << endl;
     //pair<float,float> limite = primMST(0,0,0).DonnePoids();
+    nonPareto->clear();
     vector<pair<float, float>> pareto;
+    vector<pair<float, float>> buffer = total;
+    std::vector<vector<bool>> F;
 
     pareto.push_back(make_pair(0, 0));
     bool test = true;
@@ -767,10 +770,26 @@ vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std
             nonPareto->push_back(make_pair(l.first, l.second));
     }
 
-    total.clear();
+
+
+    for(unsigned int i=0; i<buffer.size();i++)
+    {
+        for(unsigned int u=0; u<pareto.size();u++)
+        {
+           if(buffer[i]==pareto[u])
+           {
+               vector<bool> t = *(G[i]);
+              // F.push_back(*(G[i]));
+           }
+        }
+    }
+
+    G.clear();
+    G = F;
 
     for (auto &l : pareto)
         cout << "pareto :" << l.first << "et" << l.second << endl;
+    total.clear();
 
     return pareto;
 }
@@ -813,8 +832,7 @@ vector<vector<bool>> Graphe::calcul_sousgraphes_admissibles(vector<pair<float, f
 
     for (unsigned int i = 0; i < nb_cas; i++)
     {
-        if (i % 1000000)
-            cout << i << endl;
+
         vector<bool> numeration_binaire;
         unsigned int nb_arretes = 0;
         int number = i;

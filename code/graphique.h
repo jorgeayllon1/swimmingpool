@@ -28,6 +28,7 @@ public:
     virtual int menuInterne(BITMAP *page);
     virtual void refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BITMAP * supportGraphe, BITMAP *GrapheGeneral);
     virtual void drawGraphe(BITMAP *){}
+    virtual void dessinerPareto(BITMAP *page,vector<pair<float,float>> &pareto);
 
 protected:
     std::string m_color_sommet;

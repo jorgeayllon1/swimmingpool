@@ -42,6 +42,11 @@ void troisDeuxUnPartez()
     initialisation();
 
     int couleurFond = makecol(223, 230, 233);
+    int numero=0;
+    std::string fichiers1;
+    std::string fichiers2;
+     std::string nomFichier;
+    std::string poidsFichiers;
 
     ///BITMAP de fond -------------------------------
     BITMAP *fond;
@@ -84,10 +89,15 @@ void troisDeuxUnPartez()
 
     int choice=5;
     bool prim = true;
+    bool fleche = false;
 
     // Boucle d'animation (pas d'interaction)
     while (!key[KEY_ESC])
     {
+
+    if(pareto.size()!=0)
+        fleche = true;
+
 
 
 
@@ -123,14 +133,16 @@ void troisDeuxUnPartez()
     case 2:
     G = espace->calcul_sousgraphes_admissibles(&total, 0);
     choice =0;
-    pareto = espace->Pareto(total,&nonPareto);
+    pareto = espace->Pareto(total,&nonPareto, &G);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
+    choice = 0;
         break;
     case 3:
     G = espace->calcul_sousgraphes_admissibles(&total, 1);
     choice =0;
-    pareto = espace->Pareto(total,&nonPareto);
+    //pareto = espace->Pareto(total,&nonPareto);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
+    //espace->drawSousGraphe(pareto);
 
         break;
     case 4:
@@ -138,32 +150,41 @@ void troisDeuxUnPartez()
     choice = 0;
         break;
     case 5:
+
         blit(accueil,screen,0,0,0,0,accueil->w,accueil->h);
-        std::string nomFichier;
-        std::string poidsFichiers;
 
-        cout << "Quel Ville voulez-vous ?" <<endl;
-        std::cin >> nomFichier;
-         cout << "Quel set de couts voulez-vous ?" <<endl;
-        std::cin >> poidsFichiers;
+//
+//        cout << "Quel Ville voulez-vous ?" <<endl;
+//        std::cin >> nomFichier;
+//         cout << "Quel set de couts voulez-vous ?" <<endl;
+//        std::cin >> poidsFichiers;
 
-        std::string fichiers1;
-        std::string fichiers2;
 
-//        nomFichier = "manhattan";
-//        poidsFichiers="0";
+
+       nomFichier = "broadway";
+       poidsFichiers="0";
 
         fichiers1 = "files/" +nomFichier+".txt";
         fichiers2 = "files/" +nomFichier+"_weights_"+poidsFichiers+".txt";
 
-
         delete(espace);
         espace = new Graphe (fichiers1, fichiers2);
+         espace->refresh(couleurFond, fond, supportCourbe, supportGraphe, GrapheGeneral);
+         break;
 
+    case 6 :
+        if(fleche)
+            {
+            numero++;
+            cout << numero;
+        if(pareto.size()==numero)
+            numero=0;
 
+        espace->Conversion(G[numero]).drawGraphe(supportGraphe);
 
-
-        break;
+            }
+            break;
+            choice = 0;
 
         }
 

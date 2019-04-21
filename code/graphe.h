@@ -37,7 +37,7 @@ public:
   std::pair<float, float> DonnePoids();
 
   /****Algorithme****/
-  vector<pair<float, float>> Pareto(std::vector<std::pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto);
+  vector<pair<float, float>> Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto,std::vector<vector<bool>> *G);
   Graphe dijkstraSPT(int nompremier, int critere);
   float dijkstraSPT(int nompremier, int critere , bool affichage);
   Graphe primMST(int nomPremier, int critereprim, int autrecritere);

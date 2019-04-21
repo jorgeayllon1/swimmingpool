@@ -17,9 +17,12 @@ Graphique::~Graphique()
 
 int Graphique::menuInterne(BITMAP *page)
 {
-       BITMAP *prim;
-       prim =load_bitmap("image/prim.bmp",NULL);
-    if (!prim)
+        BITMAP *primbouton = load_bitmap("image/prim.bmp", NULL);
+        BITMAP *clearbouton = load_bitmap("image/clear.bmp", NULL);
+        BITMAP *biobj = load_bitmap("image/biobj.bmp", NULL);
+        BITMAP *distance = load_bitmap("image/dstance.bmp", NULL);
+        BITMAP *fichier = load_bitmap("image/fichier.bmp", NULL);
+    if (!primbouton || !clearbouton || !biobj || !distance || !fichier)
     {
         allegro_message("pas pu trouver/charger mon_image.bmp");
         allegro_exit(); exit(EXIT_FAILURE);
@@ -29,24 +32,50 @@ int Graphique::menuInterne(BITMAP *page)
     int finX = startX + 100;
     int startY = SCREEN_H/2 + 100;
     int finY = startY + 50;
-    int CHOIX =10;
+    int CHOIX =6;
     int couleurBouton = makecol(119, 140, 163);
 
 
-    rectfill(page, startX,startY, finX, startY + 50, couleurBouton);
+//    rectfill(page, startX,startY, finX, startY + 50, couleurBouton);
+//    rect(page, startX,startY, finX, startY + 50, makecol(0,0,0));
+
+//    rectfill(page, startX,startY+50, finX, startY + 100,couleurBouton);
+//    rect(page, startX,startY+50, finX, startY + 100, makecol(0,0,0));
+//
+//    rectfill(page, startX,startY+100, finX, startY + 150,couleurBouton);
+//    rect(page, startX,startY+100, finX, startY + 150, makecol(0,0,0));
+//
+//    rectfill(page, startX,startY+150, finX, startY + 200, couleurBouton);
+//    rect(page, startX,startY+150, finX, startY + 200, makecol(0,0,0));
+//
+//    rectfill(page, startX,startY+200, finX, startY + 250, couleurBouton);
+//    rect(page, startX,startY+200, finX, startY + 250, makecol(0,0,0));
+
+
+    blit(primbouton,page,0,0, startX,startY ,100,50);
     rect(page, startX,startY, finX, startY + 50, makecol(0,0,0));
 
-    rectfill(page, startX,startY+50, finX, startY + 100,couleurBouton);
+    blit(biobj,page,0,0, startX,startY+50 ,100,50);
     rect(page, startX,startY+50, finX, startY + 100, makecol(0,0,0));
 
-    rectfill(page, startX,startY+100, finX, startY + 150,couleurBouton);
+    blit(distance,page,0,0, startX,startY+100 ,100,50);
     rect(page, startX,startY+100, finX, startY + 150, makecol(0,0,0));
 
-    rectfill(page, startX,startY+150, finX, startY + 200, couleurBouton);
+    blit(clearbouton,page,0,0, startX,startY+150 ,100,50);
     rect(page, startX,startY+150, finX, startY + 200, makecol(0,0,0));
 
-    rectfill(page, startX,startY+200, finX, startY + 250, couleurBouton);
+    blit(fichier,page,0,0, startX,startY+200 ,100,50);
     rect(page, startX,startY+200, finX, startY + 250, makecol(0,0,0));
+
+
+
+    rectfill(page, startX+100,startY+75, finX+30, startY + 125, couleurBouton);
+    rect(page, startX+100,startY+75, finX+30, startY + 125, makecol(0,0,0));
+
+    rectfill(page, startX-30,startY+75, startX, startY + 125, couleurBouton);
+    rect(page, startX-30,startY+75, startX, startY + 125, makecol(0,0,0));
+
+
 
 
     for(int i=1;i<=CHOIX;i++)
@@ -55,6 +84,11 @@ int Graphique::menuInterne(BITMAP *page)
     if(mouse_x  > startX && mouse_x  < finX && mouse_y < (startY + 50*i) && mouse_y > startY&& mouse_b & 1) // gauche : dessiner en rouge)
         return i;
     }
+
+    if(mouse_x  > startX +100 && mouse_x  < finX+30 && mouse_y > (startY + 75) && mouse_y < startY +125&& mouse_b & 1) // gauche : dessiner en rouge)
+        return 6;
+
+
     return 0;
 
 
@@ -71,12 +105,13 @@ void Graphique::drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<
 //    int originX = 0;
 //    int longGraph = 400;
     sort(nonPareto.begin(), nonPareto.end(), sortbyCout2);
-    double Xmax = nonPareto.back().second;
+    double Xmax = nonPareto[0].second;
     sort(nonPareto.begin(), nonPareto.end(), sortbyCout1);
-    double Ymax = nonPareto.back().first;
+    double Ymax = nonPareto[0].first;
 
     rect(arbo, 0,0, arbo->w-10, arbo->h-10, makecol(0,0,0));
-    double coef = 1/(100/sqrt(pow(Xmax-originX,2)+pow((origineY)+Ymax,2)));
+    //double coef = 1/(100/sqrt(pow(Xmax-originX,2)+pow((origineY)+Ymax,2)));
+    double coef = (2000/sqrt(pow(Xmax-(originX+longGraph),2)+pow((origineY)+Ymax,2)));
     cout << "le coef est :" <<coef<<endl;
     //void floodfill(BITMAP *bmp, int x, int y, int color);
 
@@ -104,6 +139,7 @@ for(auto &p : pareto)
 
 void Graphique::refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BITMAP * supportGraphe, BITMAP *GrapheGeneral)
 {
+     clear_bitmap(fond);
     clear_bitmap(GrapheGeneral);
     clear_bitmap(supportGraphe);
     clear_bitmap(supportCourbe);
@@ -119,6 +155,16 @@ void Graphique::refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BIT
     blit(GrapheGeneral,fond,50,50,0,0,GrapheGeneral->w,GrapheGeneral->h);
 }
 
+
+void Graphique::dessinerPareto(BITMAP * page,std::vector<pair<float,float>> &pareto )
+{
+
+
+
+
+
+
+}
 //int Graphique::fairePrim()
 //{
 //    bool continu = true;

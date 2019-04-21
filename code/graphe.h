@@ -38,7 +38,8 @@ public:
 
   /****Algorithme****/
   vector<pair<float, float>> Pareto(std::vector<std::pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto);
-  pair<float, Graphe> dijkstraSPT(int nompremier, int critere , bool affichage);
+  Graphe dijkstraSPT(int nompremier, int critere);
+  float dijkstraSPT(int nompremier, int critere , bool affichage);
   Graphe primMST(int nomPremier, int critereprim, int autrecritere);
   int welshpowel();
 

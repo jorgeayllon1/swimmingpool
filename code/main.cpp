@@ -6,8 +6,6 @@
 #include <bitset>
 using namespace std;
 
-
-
 int main()
 {
     troisDeuxUnPartez();

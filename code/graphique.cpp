@@ -106,7 +106,10 @@ void Graphique::drawNuage(BITMAP *arbo,vector<pair<float,float>> &pareto,vector<
 //    int origineY = SCREEN_H-100;
 //    int originX = 0;
 //    int longGraph = 400;
+    cout <<  nonPareto[0].second;
+    cout << "aie";
     sort(nonPareto.begin(), nonPareto.end(), sortbyCout2);
+
     double Xmax = nonPareto[0].second;
     sort(nonPareto.begin(), nonPareto.end(), sortbyCout1);
     double Ymax = nonPareto[0].first;
@@ -145,6 +148,7 @@ void Graphique::refresh(int couleurFond, BITMAP *fond,BITMAP * supportCourbe,BIT
     clear_bitmap(GrapheGeneral);
     clear_bitmap(supportGraphe);
     clear_bitmap(supportCourbe);
+    system("cls");
 
     rectfill(supportCourbe, 0,0, supportCourbe->w, supportCourbe->h, couleurFond);
     rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);

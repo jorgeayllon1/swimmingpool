@@ -9,5 +9,7 @@ using namespace std;
 int main()
 {
     troisDeuxUnPartez();
+
+    return 0;
 }
 END_OF_MAIN();

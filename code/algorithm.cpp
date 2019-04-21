@@ -134,15 +134,22 @@ void troisDeuxUnPartez()
 
         break;
     case 2:
+    if(G.size() != 0)
+        G.clear();
+    espace->refresh(couleurFond, fond, supportCourbe, supportGraphe, GrapheGeneral);
+    choice = 0;
     G = espace->calcul_sousgraphes_admissibles(&total, 0);
-    choice =0;
+
     pareto = espace->Pareto(total,&nonPareto, G);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
-    choice = 0;
+
         break;
     case 3:
+        if(G.size() != 0)
+        G.clear();
+    espace->refresh(couleurFond, fond, supportCourbe, supportGraphe, GrapheGeneral);
+    choice = 0;
     G = espace->calcul_sousgraphes_admissibles(&total, 1);
-    choice =0;
     pareto = espace->Pareto(total,&nonPareto, G);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
     //espace->drawSousGraphe(pareto);

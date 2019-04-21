@@ -738,7 +738,7 @@ pair<float, float> Graphe::DonnePoids()
 
 
 
-vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto,std::vector<vector<bool>> *G)
+vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std::vector<std::pair<float, float>> *nonPareto,std::vector<vector<bool>> G)
 {
 
     //pair<float,float> limite = primMST(0,0,1);
@@ -770,7 +770,7 @@ vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std
             nonPareto->push_back(make_pair(l.first, l.second));
     }
 
-
+    pareto.erase(pareto.begin());
 
     for(unsigned int i=0; i<buffer.size();i++)
     {
@@ -778,8 +778,10 @@ vector<pair<float, float>> Graphe::Pareto(vector<pair<float, float>> &total, std
         {
            if(buffer[i]==pareto[u])
            {
-               vector<bool> t = *(G[i]);
-              // F.push_back(*(G[i]));
+//              vector<bool> alert;
+//              for(int z=0; z < (G[i]).size();z++)
+//              alert.push_back.(G([i][z]));
+              F.push_back(G[i]);
            }
         }
     }

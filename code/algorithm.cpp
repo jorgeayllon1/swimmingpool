@@ -133,7 +133,7 @@ void troisDeuxUnPartez()
     case 2:
     G = espace->calcul_sousgraphes_admissibles(&total, 0);
     choice =0;
-    pareto = espace->Pareto(total,&nonPareto, &G);
+    pareto = espace->Pareto(total,&nonPareto, G);
     espace->drawNuage(supportCourbe, pareto, nonPareto );
     choice = 0;
         break;
@@ -153,16 +153,16 @@ void troisDeuxUnPartez()
 
         blit(accueil,screen,0,0,0,0,accueil->w,accueil->h);
 
-//
-//        cout << "Quel Ville voulez-vous ?" <<endl;
-//        std::cin >> nomFichier;
-//         cout << "Quel set de couts voulez-vous ?" <<endl;
-//        std::cin >> poidsFichiers;
+
+        cout << "Quel Ville voulez-vous ?" <<endl;
+        std::cin >> nomFichier;
+         cout << "Quel set de couts voulez-vous ?" <<endl;
+        std::cin >> poidsFichiers;
 
 
 
-       nomFichier = "broadway";
-       poidsFichiers="0";
+//       nomFichier = "broadway";
+//       poidsFichiers="0";
 
         fichiers1 = "files/" +nomFichier+".txt";
         fichiers2 = "files/" +nomFichier+"_weights_"+poidsFichiers+".txt";
@@ -175,14 +175,18 @@ void troisDeuxUnPartez()
     case 6 :
         if(fleche)
             {
+                clear_bitmap(supportGraphe);
+                rectfill(supportGraphe, 0,0, supportGraphe->w, supportGraphe->h, couleurFond);
             numero++;
             cout << numero;
         if(pareto.size()==numero)
             numero=0;
 
         espace->Conversion(G[numero]).drawGraphe(supportGraphe);
+        rest(100);
 
             }
+
             break;
             choice = 0;
 
